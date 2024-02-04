@@ -1,20 +1,59 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
+    "allowJs": true,
+    "rootDir": "./",
+    "module": "commonjs",
+    "declaration": true,
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "removeComments": true,
+    "outDir": "./dist",
+    "incremental": true,
     "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "strictNullChecks": false,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "paths": {
+      "@lib/auth": [
+        "libs/auth/src/index.ts"
+      ],
+      "@lib/auth/entities": [
+        "libs/auth/src/lib/database/entities/index.ts"
+      ],
+      "@lib/accounting": [
+        "libs/accounting/src/index.ts"
+      ],
+      "@lib/auth/accounting": [
+        "libs/accounting/src/lib/database/entities/index.ts"
+      ],
+      "@lib/product": [
+        "libs/product/src/index.ts"
+      ],
+      "@lib/product/entities": [
+        "libs/product/src/lib/database/entities/index.ts"
+      ],
+      "@lib/shared": [
+        "libs/shared/src/index.ts"
+      ],
+      "@lib/shared/config/*": [
+        "libs/shared/src/lib/config/*"
+      ],
+      "@lib/shared/entities": [
+        "libs/shared/src/lib/entities/*"
+      ],
+      "@lib/shared/modules/*": [
+        "libs/shared/src/lib/modules/*"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

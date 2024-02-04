@@ -1,0 +1,2 @@
+export const AXIOS_TOKEN = 'AXIOS_TOKEN';
+export const HTTP_AXIOS_TOKEN = 'HTTP_AXIOS_TOKEN';

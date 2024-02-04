@@ -22,9 +22,22 @@
             "allow": [],
             "depConstraints": [
               {
-                "sourceTag": "*",
+                "sourceTag": "backend-auth",
                 "onlyDependOnLibsWithTags": [
-                  "*"
+                  "lib/auth",
+                  "backend/shared"
+                ]
+              },
+              {
+                "sourceTag": "backend/shared",
+                "onlyDependOnLibsWithTags": [
+                  "backend/shared"
+                ]
+              },
+              {
+                "sourceTag": "lib/auth",
+                "onlyDependOnLibsWithTags": [
+                  "backend/shared"
                 ]
               }
             ]

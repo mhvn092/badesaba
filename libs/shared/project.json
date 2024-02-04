@@ -1,0 +1,26 @@
+{
+  "name": "backend/shared",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/shared/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/backend/shared",
+        "main": "libs/backend/shared/src/index.ts",
+        "tsConfig": "libs/backend/shared/tsconfig.lib.json",
+        "assets": ["libs/backend/shared/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/backend/shared/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["backend/shared"]
+}

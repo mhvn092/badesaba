@@ -1,0 +1,24 @@
+{
+  "name": "accounting",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/accounting/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "accounting:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "accounting:build:development"
+        },
+        "production": {
+          "buildTarget": "accounting:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
