@@ -1,11 +1,9 @@
-import { uuid } from '@spad/shared/common';
 import { JwtPayload } from 'jsonwebtoken';
+import { ObjectId } from 'typeorm';
 
 export interface Payload extends Pick<JwtPayload, 'iat' | 'exp'> {
-  id: uuid | any;
-  username?: string;
-  email?: string;
-  mobile?: string;
+  _id: ObjectId;
+  email: string;
   isActive: boolean;
   clientId?: string;
 }

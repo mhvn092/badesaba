@@ -1,7 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
 import { Pagination } from '../classes';
-import { CheckNumber } from '../decorators';
+import { CheckNumber } from '../decorators/custom-check-number.decorator';
 
 export class PaginationDto {
   constructor(obj?: Partial<PaginationDto>) {

@@ -1,5 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { CheckString } from '../decorators';
+import { CheckString } from '../decorators/custom-check-string.decorator';
 
 export class OrderDto {
   constructor(obj?: Partial<OrderDto>) {

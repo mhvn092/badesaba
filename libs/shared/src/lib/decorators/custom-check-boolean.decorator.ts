@@ -1,7 +1,8 @@
 import { applyDecorators } from '@nestjs/common';
 import { IsBoolean } from 'class-validator';
-import { getOptionalDecorators } from '../utils';
+import { booleanTransform, getOptionalDecorators } from '../utils';
 import { Column } from 'typeorm';
+import { Transform } from 'class-transformer';
 
 export function CheckBoolean(
   nullable = false,
@@ -10,6 +11,7 @@ export function CheckBoolean(
 ) {
   const decorators: Array<PropertyDecorator> = [
     IsBoolean(),
+    Transform((param) => booleanTransform(param)),
     ...getOptionalDecorators(nullable),
     ...(forEntity ? [Column({ nullable, default: defaultValue })] : []),
   ];

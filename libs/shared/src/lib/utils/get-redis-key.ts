@@ -1,28 +1,28 @@
-import { RedisPrefixesEnum, RedisProjectEnum, RedisSubPrefixesEnum } from '../enums';
+import { RedisPrefixesEnum, RedisServiceEnum, RedisSubPrefixesEnum } from '../enums';
 
 export function getStandardKey(
-  project: RedisProjectEnum,
+  service: RedisServiceEnum,
   keyPrefix: RedisPrefixesEnum,
   subPrefix: RedisSubPrefixesEnum,
   id: string,
 ): string {
-  return project + ':' + keyPrefix + ':' + subPrefix + ':' + id;
+  return service + ':' + keyPrefix + ':' + subPrefix + ':' + id;
 }
 
 export function getStandardKeyWithoutId(
-  project: RedisProjectEnum,
+  service: RedisServiceEnum,
   keyPrefix: RedisPrefixesEnum,
   subPrefix: RedisSubPrefixesEnum,
 ): string {
-  return project + ':' + keyPrefix + ':' + subPrefix;
+  return service + ':' + keyPrefix + ':' + subPrefix;
 }
 
 export function getPatternKey(
-  project: RedisProjectEnum,
+  service: RedisServiceEnum,
   keyPrefix: RedisPrefixesEnum,
   subPrefix?: RedisSubPrefixesEnum,
 ): string {
-  let pattern = project + ':' + keyPrefix + ':';
+  let pattern = service + ':' + keyPrefix + ':';
   if (subPrefix) pattern += subPrefix + ':';
   return pattern + '*';
 }

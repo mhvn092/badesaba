@@ -1,6 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
-import { CheckString } from '../decorators';
+import { CheckString } from '../decorators/custom-check-string.decorator';
 
 export class JwtRefreshDto {
   @CheckString(false,false)

@@ -1,10 +1,9 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { AxiosService } from './services/axios.service';
-import { AXIOS_TOKEN, HTTP_AXIOS_TOKEN } from './constansts/tokens.constant';
 import { Provider } from '@nestjs/common/interfaces/modules/provider.interface';
-import { HttpAxiosService } from './services/http-axios.service';
+import { AXIOS_TOKEN } from './constansts/tokens.constant';
+import { AxiosService } from './services/axios.service';
 
-const providers: Array<Provider<AxiosService | HttpAxiosService>> = [
+const providers: Array<Provider<AxiosService>> = [
   {
     provide: AXIOS_TOKEN,
     useClass: AxiosService,

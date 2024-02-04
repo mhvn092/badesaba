@@ -12,3 +12,4 @@ export * from './lib/interfaces';
 export * from './lib/modules';
 export * from './lib/classes';
 export * from './lib/config';
+export * from './lib/models';

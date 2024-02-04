@@ -1,9 +1,9 @@
-import { OrderDto, PaginationDto } from '@lib/shared';
+import { OrderDto, PaginationDto, objectId } from '@lib/shared';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Like, MongoRepository } from 'typeorm';
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
-import { ARGSearchFilters } from '../../../../dtos/person';
 import { UserEntity } from './user.entity';
+import { SearchFilters } from '../../../../dtos';
 
 @Injectable()
 export class UserRepository extends MongoRepository<UserEntity> {
@@ -11,7 +11,7 @@ export class UserRepository extends MongoRepository<UserEntity> {
     super(UserEntity, _dataSource.createEntityManager());
   }
 
-  getProfile(userId: string): Promise<UserEntity> {
+  getProfile(userId: objectId): Promise<UserEntity> {
     return this.getOneOrFail(userId, { isActive: true, isVerified: true });
   }
 
@@ -25,7 +25,7 @@ export class UserRepository extends MongoRepository<UserEntity> {
   }
 
   getAllWithPaginated(
-    filters: ARGSearchFilters,
+    filters: SearchFilters,
     pagination: PaginationDto,
     order: OrderDto
   ): Promise<[UserEntity[], number]> {
@@ -62,7 +62,7 @@ export class UserRepository extends MongoRepository<UserEntity> {
   }
 
   getOne(
-    id: string,
+    id: objectId,
     conditions?: Partial<Record<keyof UserEntity, any>>
   ): Promise<UserEntity> {
     return this.findOne({
@@ -107,7 +107,7 @@ export class UserRepository extends MongoRepository<UserEntity> {
   }
 
   async getOneOrFail(
-    id: string,
+    id: objectId,
     conditions?: Partial<Record<keyof UserEntity, any>>
   ): Promise<UserEntity> {
     const user: UserEntity = await this.getOne(id, conditions);

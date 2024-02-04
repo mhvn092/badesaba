@@ -1,6 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
-import { CheckString } from '../decorators';
+import { CheckString } from '../decorators/custom-check-string.decorator';
 
 export class TokensDto {
   @CheckString(false, false)

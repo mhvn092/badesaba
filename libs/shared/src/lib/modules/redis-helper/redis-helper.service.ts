@@ -1,11 +1,9 @@
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { Injectable } from '@nestjs/common';
-import { uuid } from '@spad/shared/common';
 import Redis, { ChainableCommander } from 'ioredis';
 import {
-  RedisHashListKeysEnum,
   RedisPrefixesEnum,
-  RedisProjectEnum,
+  RedisServiceEnum,
   RedisSubPrefixesEnum,
 } from '../../enums';
 
@@ -22,16 +20,6 @@ export class RedisHelperService {
     if (cachedKey) {
       return JSON.parse(cachedKey) as T;
     }
-  }
-
-  async getCacheFromListOfKeys<T>(keys: string[]): Promise<T | void> {
-    const itemPipeline = this.pipeLine;
-
-    keys.forEach((key) => itemPipeline.get(key));
-
-    itemPipeline
-      .exec()
-      .then((res) => res.map<T>(([_, result]) => JSON.parse(result as string) as T));
   }
 
   async setCache<T>(key: string, value: T, ttl?: number): Promise<void> {
@@ -53,64 +41,31 @@ export class RedisHelperService {
     }
   }
 
-  removeCacheList(keys: string[]) {
-    const itemPipeline = this.pipeLine;
-
-    keys.forEach((key) => itemPipeline.del(key));
-    return itemPipeline.exec();
-  }
-
-  removeCacheItemFromKey(key: RedisHashListKeysEnum, id: uuid): void {
-    this._redisClient.hdel(key, id);
-  }
-
   getTtl(key: string): Promise<number> {
     return this._redisClient.ttl(key);
   }
 
-  getItemsOfHashList<T>(hashKeyName: string, listOfKeys: string[]): Promise<T[]> {
-    const itemPipeline = this.pipeLine;
-    listOfKeys.forEach((key) => itemPipeline.hget(hashKeyName, key));
-    return itemPipeline
-      .exec()
-      .then((res) => res.map<T>(([_, result]) => JSON.parse(result as string) as T));
-  }
-
-  async getAllItemsOfHashList<T>(hashKeyName: string): Promise<T[]> {
-    const cachedData: Record<string, string> = await this._redisClient.hgetall(hashKeyName);
-    return Object.entries(cachedData).map(([_, value]) => JSON.parse(value) as T);
-  }
-
-  setHashCache<T>(hashKey: string, field: string, value: T) {
-    const stringFormat = JSON.stringify(value);
-    return this._redisClient.hset(hashKey, [field, stringFormat]);
-  }
-
-  cacheMultipleHashListKeys(hashKey: string, keys: Record<string, string>) {
-    this._redisClient.hset(hashKey, keys);
-  }
-
   getStandardKey(
-    project: RedisProjectEnum,
+    project: RedisServiceEnum,
     keyPrefix: RedisPrefixesEnum,
     subPrefix: RedisSubPrefixesEnum,
-    id: uuid,
+    id: string
   ): string {
     return project + ':' + keyPrefix + ':' + subPrefix + ':' + id;
   }
 
   getStandardKeyWithoutId(
-    project: RedisProjectEnum,
+    project: RedisServiceEnum,
     keyPrefix: RedisPrefixesEnum,
-    subPrefix: RedisSubPrefixesEnum,
+    subPrefix: RedisSubPrefixesEnum
   ): string {
     return project + ':' + keyPrefix + ':' + subPrefix;
   }
 
   getPatternKey(
-    project: RedisProjectEnum,
+    project: RedisServiceEnum,
     keyPrefix: RedisPrefixesEnum,
-    subPrefix?: RedisSubPrefixesEnum,
+    subPrefix?: RedisSubPrefixesEnum
   ): string {
     let pattern = project + ':' + keyPrefix + ':';
     if (subPrefix) pattern += subPrefix + ':';

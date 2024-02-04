@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, MongoRepository } from 'typeorm';
 import { ClientEntity } from './client.entity';
+import { objectId } from '@lib/shared';
 
 @Injectable()
 export class ClientRepository extends MongoRepository<ClientEntity> {
@@ -19,7 +20,7 @@ export class ClientRepository extends MongoRepository<ClientEntity> {
     return this.findOne({ where: { id, ...(conditions && { ...conditions }) } });
   }
 
-  getClientEachUser(userId: string, clientId: string): Promise<ClientEntity> {
+  getClientEachUser(userId: objectId, clientId: string): Promise<ClientEntity> {
     return this.findOne({ where: { userId, clientId } });
   }
 
@@ -28,7 +29,7 @@ export class ClientRepository extends MongoRepository<ClientEntity> {
     return this.save(newClient);
   }
 
-  async removeRefreshToken(id: string): Promise<void> {
+  async removeRefreshToken(id: objectId): Promise<void> {
     await this.update(id, { refreshToken: null });
   }
 }

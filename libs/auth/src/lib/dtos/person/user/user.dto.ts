@@ -1,117 +1,73 @@
-import { ARGUserEntity } from './../../../database/entities';
-import { ApiProperty, ApiPropertyOptional, OmitType, PickType } from '@nestjs/swagger';
-import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { BadgeEnum, CheckBoolean, CheckEnum, CheckString, GLOBAL_EXCEPT_DTO } from '@lib/shared';
 import {
-  ActivationEnum,
-  BadgeEnum,
-  booleanTransform,
-  GLOBAL_EXCEPT_DTO,
-  VerificationEnum,
-} from '@spad/backend/shared';
-import { uuid } from '@spad/shared/common';
-import { Transform } from 'class-transformer';
+  OmitType,
+  PickType
+} from '@nestjs/swagger';
+import { UserEntity } from '../../../database/entities/person/user/user.entity';
 
-export class ARGUserModel extends ARGUserEntity {}
+export class UserModel extends UserEntity {}
 
-export class ARGUserForgetPasswordWithEmail extends PickType(ARGUserModel, ['email'] as const) {}
+export class RegisterDto extends PickType(UserModel, [
+  'firstName',
+  'lastName',
+  'email',
+  'badge'
+]) {
+  @CheckString(false, false)
+  password: string;
+}
 
-export class ARGUserForgetPasswordWithMobile extends PickType(ARGUserModel, ['mobile'] as const) {}
+export class LoginDto extends PickType(UserModel, ['email']) {
+  @CheckString(false, false)
+  password: string;
+}
 
-export class ARGUpdateProfile extends OmitType(ARGUserModel, [
+export class ForgotPasswordDto extends PickType(UserModel, ['email'] as const) {}
+
+export class UpdateProfileDto extends OmitType(UserModel, [
   ...GLOBAL_EXCEPT_DTO,
-  'mobile',
-  'avatar',
-  'client',
   'isActive',
   'isVerified',
   'password',
-  'userRoles',
-  'avatarLink',
-  'avatar',
-  'avatarFileId',
+  'email',
+  'badge',
 ] as const) {}
 
-export class ARGUpdatePassword {
-  @ApiProperty()
-  @IsString()
+
+export class AdminProfileDto extends UpdateProfileDto {
+  @CheckString(false, false)
+  userId: string;
+}
+
+export class VerifyEmailDto extends PickType(UserModel, ['email', '_id'] as const) {
+  @CheckString(false, false)
+  token: string;
+}
+
+export class ResetPasswordDto extends VerifyEmailDto {
+  @CheckString(false, false)
+  password: string;
+}
+
+export class UpdatePasswordDto {
+  @CheckString(false, false)
   password: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
+  @CheckString(true, false)
   oldPassword?: string;
 }
 
-export class ARGUpdateAvatarDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsUUID()
-  avatarFileId: uuid;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsUUID()
-  userId?: uuid;
-}
-
-export class ARGUpdateAvatarResponseDto extends PickType(ARGUserModel, ['avatarLink']) {
-  constructor(obj: Partial<ARGUpdateAvatarResponseDto>) {
-    super();
-    Object.assign(this, obj);
-  }
-}
-
-export class ARGUpdateSetPassword {
-  @ApiProperty({ format: 'uuid' })
-  @IsUUID()
-  userId: uuid;
-
-  @ApiProperty()
-  @IsString()
-  password: string;
-}
-
-export class ARGUpdateUserActive {
-  @ApiProperty({ enum: ActivationEnum })
-  @IsEnum(ActivationEnum)
-  action: ActivationEnum;
-}
-
-export class ARGUpdateUserVerify {
-  @ApiProperty({ enum: VerificationEnum })
-  @IsEnum(VerificationEnum)
-  action: VerificationEnum;
-}
-
-export class ARGSearchFilters {
-  @ApiPropertyOptional()
-  @IsString()
-  @IsOptional()
+export class SearchFilters {
+  @CheckString(true, false)
   term?: string;
 
-  @ApiPropertyOptional()
-  @Transform((param) => booleanTransform(param))
-  @IsBoolean()
-  @IsOptional()
+  @CheckBoolean(true, false)
   isActive?: boolean;
 
-  @ApiPropertyOptional()
-  @Transform((param) => booleanTransform(param))
-  @IsBoolean()
-  @IsOptional()
+  @CheckBoolean(true, false)
   isVerify?: boolean;
 
-  @ApiPropertyOptional({ enum: BadgeEnum })
-  @IsEnum(BadgeEnum)
-  @IsOptional()
+  @CheckEnum(BadgeEnum,true,false)
   badge?: BadgeEnum;
-}
-
-export class ARGUpdateForgetPassword extends PickType(ARGUserModel, ['email', 'id'] as const) {
-  @ApiProperty()
-  @IsString()
-  token: string;
-
-  @ApiProperty()
-  @IsString()
-  newPassword: string;
 }

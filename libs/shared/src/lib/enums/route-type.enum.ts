@@ -9,6 +9,4 @@ export enum RouteTypeEnum {
   BASE = 'BASE',
   // routes that can be both public or user with token apply, if the user has token, the userId will be used in that route
   OPTIONAL = 'OPTIONAL',
-  // routes that only guest have access to
-  GUEST = 'GUEST',
 }

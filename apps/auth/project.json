@@ -1,9 +1,28 @@
 {
   "name": "auth",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/auth/src",
   "projectType": "application",
   "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "dependsOn": [],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/auth",
+        "main": "apps/auth/src/main.ts",
+        "tsConfig": "apps/auth/tsconfig.app.json",
+        "assets": ["apps/auth/src/assets"],
+        "webpackConfig": "apps/auth/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
@@ -18,7 +37,56 @@
           "buildTarget": "auth:build:production"
         }
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/auth/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/auth/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "migration:create": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npm run typeorm migration:create libs/auth/src/lib/database/migrations/{args.name}"
+      }
+    },
+    "migration:run": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npm run typeorm -- migration:run -t each -d libs/auth/src/lib/database/data-source.ts"
+      }
+    },
+    "migration:revert": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npm run typeorm -- migration:revert -t each -d libs/auth/src/lib/database/data-source.ts"
+      }
+    },
+    "migration:generate": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npm run typeorm -- migration:generate -d libs/auth/src/lib/database/data-source.ts libs/auth/src/lib/database/migrations/{args.name}"
+      }
     }
   },
-  "tags": []
+  "tags": ["auth"]
 }

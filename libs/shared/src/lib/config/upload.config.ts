@@ -1,7 +1,8 @@
-import { IsEnum, IsIn, IsNotEmpty, IsNumber, IsString, Matches } from 'class-validator';
-import { registerConfig } from '../utils';
+import { IsIn, Matches } from 'class-validator';
 import { URL_WITHOUT_TRAILING_SLASH } from '../constants';
-import { CheckNumber, CheckString } from '../decorators';
+import { CheckNumber } from '../decorators/custom-check-number.decorator';
+import { registerConfig } from '../utils';
+import { CheckString } from '../decorators/custom-check-string.decorator';
 
 export enum UPLOAD_CONFIG {
   UPLOAD_MAX_LIMIT_MB = 'UPLOAD_MAX_LIMIT_MB',

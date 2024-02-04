@@ -4,41 +4,34 @@ import { typeormConfig } from './config/typeorm.config';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { Module } from '@nestjs/common';
 
-@Module({})
-export class SharedTypeormModule {
-  static forRoot(config: Pick<DataSourceOptions, 'entities' | 'migrations'>) {
+export class SharedTypeOrmModule {
+  static forRoot() {
     return {
-      module: SharedTypeormModule,
-      import: [
+      module: SharedTypeOrmModule,
+      imports: [
         ConfigModule.forRoot({
           isGlobal: true,
           cache: true,
         }),
-        ConfigModule.forFeature(typeormConfig),
+
         TypeOrmModule.forRootAsync({
           imports: [ConfigModule.forFeature(typeormConfig)],
-          useFactory: (
-            typeormConfigService: ConfigType<typeof typeormConfig>
-          ) =>
-            ({
-              schema: 'public',
-              type: typeormConfigService.connection as any,
-              database: typeormConfigService.database,
+          useFactory: (typeormConfigService: ConfigType<typeof typeormConfig>) => {
+            return {
+              type: 'mongodb',
               host: typeormConfigService.host,
+              port: typeormConfigService.port,
               username: typeormConfigService.username,
               password: typeormConfigService.password,
-              port: typeormConfigService.port,
-              synchronize: true,
+              database: typeormConfigService.database,
               autoLoadEntities: true,
-              logging: 'all',
-              migrations: config.migrations,
-              entities: config.entities,
-              migrationsTableName: 'migrations',
-            } as DataSourceOptions),
+              synchronize: false,
+              logging: typeormConfigService.logging as any,
+            }
+          },
           inject: [typeormConfig.KEY],
         }),
       ],
-      providers: [DataSource],
     };
   }
 }

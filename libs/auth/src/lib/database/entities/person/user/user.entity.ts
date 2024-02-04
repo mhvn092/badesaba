@@ -33,7 +33,7 @@ export class UserEntity extends SharedBaseEntity {
   @CheckBoolean()
   isActive: boolean;
 
-  @CheckEnum(BadgeEnum, true, true, BadgeEnum.Guest)
+  @CheckEnum(BadgeEnum, true, true, BadgeEnum.Customer)
   badge?: BadgeEnum;
 
   get fullName(): string {

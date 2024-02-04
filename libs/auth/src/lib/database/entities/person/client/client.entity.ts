@@ -1,4 +1,4 @@
-import { SharedBaseEntity } from '@lib/shared';
+import { SharedBaseEntity, objectId } from '@lib/shared';
 import { Column, Entity, Unique } from 'typeorm';
 
 @Entity({
@@ -10,7 +10,7 @@ export class ClientEntity extends SharedBaseEntity {
   refreshToken?: string;
 
   @Column()
-  userId: string;
+  userId: objectId;
 
   @Column()
   clientId: string;

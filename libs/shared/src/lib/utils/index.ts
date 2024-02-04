@@ -16,3 +16,4 @@ export * from './apply-mixins-classes';
 export * from './get-redis-key';
 export * from './get-optional-decorators';
 export * from './get-shared-decorators';
+export * from './get-route-with-prefix';

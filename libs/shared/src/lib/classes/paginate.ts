@@ -1,5 +1,5 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CheckNumber } from '../decorators';
+import { ApiProperty } from '@nestjs/swagger';
+import { CheckNumber } from '../decorators/custom-check-number.decorator';
 
 export class Pagination {
   @CheckNumber(false, false)
