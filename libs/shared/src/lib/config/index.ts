@@ -5,3 +5,4 @@ export * from './bcrypt.config';
 export * from './swagger';
 export * from './upload.config';
 export * from './jwt.config';
+export * from './grpc.config';

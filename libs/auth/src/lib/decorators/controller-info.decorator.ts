@@ -28,7 +28,7 @@ export function AuthControllerInfo(
       // @todo vahidnejad: add RolesGuard
       decorators.push(UseGuards(JwtAuthGuard));
     }
-  }
+ }
 
   return applyDecorators(...decorators);
 }

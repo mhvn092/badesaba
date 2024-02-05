@@ -15,7 +15,14 @@
         "outputPath": "dist/apps/accounting",
         "main": "apps/accounting/src/main.ts",
         "tsConfig": "apps/accounting/tsconfig.app.json",
-        "assets": ["apps/accounting/src/assets"],
+        "assets": [
+          "apps/accounting/src/assets",
+          {
+            "input": "libs/shared/src/lib/assets",
+            "glob": "**/*",
+            "output": "assets-shared"
+          }
+        ],
         "webpackConfig": "apps/accounting/webpack.config.js"
       },
       "configurations": {

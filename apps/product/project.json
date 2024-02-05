@@ -15,7 +15,14 @@
         "outputPath": "dist/apps/product",
         "main": "apps/product/src/main.ts",
         "tsConfig": "apps/product/tsconfig.app.json",
-        "assets": ["apps/product/src/assets"],
+        "assets": [
+          "apps/product/src/assets",
+          {
+            "input": "libs/shared/src/lib/assets",
+            "glob": "**/*",
+            "output": "assets-shared"
+          }
+        ],
         "webpackConfig": "apps/product/webpack.config.js"
       },
       "configurations": {

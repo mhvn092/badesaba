@@ -26,6 +26,7 @@ export class SharedTypeOrmModule {
               database: typeormConfigService.database,
               autoLoadEntities: true,
               synchronize: false,
+              authSource: typeormConfigService.mongoAuthSource,
               logging: typeormConfigService.logging as any,
             }
           },

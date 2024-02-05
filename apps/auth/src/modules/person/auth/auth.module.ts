@@ -5,12 +5,14 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtModuleOptions } from '@nestjs/jwt/dist/interfaces/jwt-module-options.interface';
 import { ConfigModule } from '@nestjs/config';
-import { JwtStrategy } from './strategies/jwt-strategy';
 import { PersonModule } from '../person.module';
 import { JwtRefreshTokenStrategy } from './strategies/jwt-refresh-token.strategy';
 import { LocalStrategy } from './strategies/local-strategy';
-import { JwtConfig, RedisHelperModule, appConfig, jwtConfig } from '@lib/shared';
+import { JwtConfig, appConfig, jwtConfig } from '@lib/shared';
+import { RedisHelperModule } from '@lib/shared/modules/redis-helper';
 import { EmailService } from './email.service';
+import { JwtStrategy } from '@lib/auth';
+import { AuthRpcController } from './auth.rpc.controller';
 
 @Module({
   imports: [
@@ -28,8 +30,14 @@ import { EmailService } from './email.service';
     RedisHelperModule,
     PassportModule,
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JwtRefreshTokenStrategy, LocalStrategy,EmailService],
+  controllers: [AuthController, AuthRpcController],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    JwtRefreshTokenStrategy,
+    LocalStrategy,
+    EmailService,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

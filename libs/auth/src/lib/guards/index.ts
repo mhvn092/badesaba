@@ -1,2 +1,3 @@
 export * from './optional.guard';
-export * from './user.guard';
+export * from './jwt.guard';
+export * from './jwt.strategy';

@@ -6,3 +6,5 @@ export * from './redis-service.enum';
 export * from './badge.enum';
 export * from './modules.enum';
 export * from './validation-status.enum';
+export * from './rpc-methods.enum';
+export * from './rpc-services.enum';

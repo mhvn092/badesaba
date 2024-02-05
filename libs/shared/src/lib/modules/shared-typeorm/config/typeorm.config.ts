@@ -34,11 +34,11 @@ export class TypeormConfig {
   @CheckString(false, false)
   database: string;
 
-  @CheckString(false, false)
-  username: string;
+  @CheckString(true, false)
+  username?: string;
 
-  @CheckString(false, false)
-  password: string;
+  @CheckString(true, false)
+  password?: string;
 
   @CheckString(false, false)
   logging = 'all';
@@ -54,14 +54,13 @@ export class TypeormConfig {
   // @IsOptional()
   // typeormUrl?: string;
 
-  // /**
-  //  * since we are using this config for both sql databases and mongo
-  //  * we can put this config in the driver extra config but we need that  for migration
-  //  * and we wanna have a separate one for the the connection, hence this config
-  //  **/
-  // @IsString()
-  // @IsOptional()
-  // mongoAuthSource?: string;
+  /**
+   * since we are using this config for both sql databases and mongo
+   * we can put this config in the driver extra config but we need that  for migration
+   * and we wanna have a separate one for the the connection, hence this config
+   **/
+  @CheckString(false, false)
+  mongoAuthSource: string;
 }
 
 export const typeormConfig = registerConfig(TypeormConfig, () => {
@@ -75,6 +74,6 @@ export const typeormConfig = registerConfig(TypeormConfig, () => {
     migrations: process.env[TYPEORM_CONFIG.TYPEORM_MIGRATIONS],
     // typeormUrl: process.env[TYPEORM_CONFIG.TYPEORM_URL],
     port: port ? +port : undefined,
-    // mongoAuthSource: process.env[TYPEORM_CONFIG.TYPEORM_MONGO_AUTH_SOURCE],
+    mongoAuthSource: process.env[TYPEORM_CONFIG.TYPEORM_MONGO_AUTH_SOURCE],
   });
 });

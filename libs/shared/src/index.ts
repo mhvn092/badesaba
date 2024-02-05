@@ -9,7 +9,6 @@ export * from './lib/modules/shared-typeorm';
 export * from './lib/guards';
 export * from './lib/utils';
 export * from './lib/interfaces';
-export * from './lib/modules';
 export * from './lib/classes';
 export * from './lib/config';
 export * from './lib/models';

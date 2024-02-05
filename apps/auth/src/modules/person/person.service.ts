@@ -13,6 +13,7 @@ import {
   PaginationDto,
   bcryptConfig,
   objectId,
+  responseWrapper,
 } from '@lib/shared';
 import {
   RegisterDto,
@@ -20,6 +21,7 @@ import {
   UpdatePasswordDto,
   UpdateProfileDto,
 } from '@lib/auth';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class PersonService {
@@ -66,7 +68,7 @@ export class PersonService {
   async activateUser(id: objectId): Promise<void> {
     const user = await this._userRepository.findOne({
       where: {
-        id,
+        _id: new ObjectId(id)
       },
     });
 
@@ -80,7 +82,7 @@ export class PersonService {
 
   async updateProfile(id: objectId, data: UpdateProfileDto): Promise<void> {
     const user = await this._userRepository.findOneBy({
-      id,
+      _id: new ObjectId(id),
     });
     if (!user) throw new NotFoundException('user not found');
     await this._userRepository.update(id, data);
@@ -116,7 +118,9 @@ export class PersonService {
   }
 
   createUser(data: RegisterDto): Promise<UserEntity> {
-    return this._userRepository.save(data);
+    return this._userRepository
+      .save(data)
+      .then((data) => responseWrapper(UserEntity, data));
   }
 
   findClient(userId: objectId, clientId?: string): Promise<ClientEntity> {

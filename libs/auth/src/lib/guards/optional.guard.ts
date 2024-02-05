@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { JwtAuthGuard } from './user.guard';
+import { JwtAuthGuard } from './jwt.guard';
 import { HeaderNames } from '@lib/shared';
 
 

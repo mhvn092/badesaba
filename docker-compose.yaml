@@ -1,42 +1,42 @@
 version: '3.9'
 services:
-  auth:
-    build:
-      dockerfile: ./apps/auth/Dockerfile
-      target: development
-      context: .
-    command: sh -c "npm run serve:auth"
-    env_file:
-     - ./apps/auth/.env
-    expose:
-      - 3001
-    ports:
-      - "4001:3001"
-      - "9010:9669"
-    depends_on:
-      - redis
-      - mongo
-    volumes:
-      - .:/app
-      - /app/node_modules
+  # auth:
+  #   build:
+  #     dockerfile: ./apps/auth/Dockerfile
+  #     target: development
+  #     context: .
+  #   command: sh -c "npm run serve:auth"
+  #   env_file:
+  #    - ./apps/auth/.env
+  #   expose:
+  #     - 3001
+  #   ports:
+  #     - "4001:3001"
+  #     - "9010:9669"
+  #   depends_on:
+  #     - redis
+  #     - mongo
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
 
-  accounting:
-    build:
-      dockerfile: ./apps/accounting/Dockerfile
-      target: development
-      context: .
-    command: sh -c "npm run serve:accounting"
-    expose:
-      - 3002
-    ports:
-      - "4020:3002"
-      - "9020:9669"
-    depends_on:
-      - redis
-      - mongo
-    volumes:
-      - .:/app
-      - /app/node_modules
+  # accounting:
+  #   build:
+  #     dockerfile: ./apps/accounting/Dockerfile
+  #     target: development
+  #     context: .
+  #   command: sh -c "npm run serve:accounting"
+  #   expose:
+  #     - 3002
+  #   ports:
+  #     - "4020:3002"
+  #     - "9020:9669"
+  #   depends_on:
+  #     - redis
+  #     - mongo
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
 
   mongo:
     image: mongo:latest
@@ -47,9 +47,7 @@ services:
     logging:
       options:
         max-size: 1g
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
+      # @todo vahidnejad add authentication
     volumes:
       - ~/deps-storage/mongo_volume:/data/db
 

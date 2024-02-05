@@ -18,19 +18,26 @@ import {
   objectId,
   Payload,
   randomHex,
-  RedisHelperService,
   RedisPrefixesEnum,
   RedisServiceEnum,
   RedisSubPrefixesEnum,
   Tokens,
   UpdateResultModel,
+  UserAccessInterface,
   UserAuthModel,
 } from '@lib/shared';
 import crypto from 'crypto';
 import { EmailService } from './email.service';
 import { ClientEntity, UserEntity } from '@lib/auth/entities';
 import { ObjectId } from 'typeorm';
-import { LoginDto, RegisterDto, ResetPasswordDto, VerifyEmailDto } from '@lib/auth';
+import {
+  LoginDto,
+  RegisterDto,
+  ResetPasswordDto,
+  VerifyEmailDto,
+} from '@lib/auth';
+import { RedisHelperService } from '@lib/shared/modules/redis-helper';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
@@ -67,9 +74,7 @@ export class AuthService {
       throw new ForbiddenException('you do not have the permission to do that');
     }
     data.password = await this._personService.hashPassword(data.password);
-    const exists = await this._personService._checkUserExistence(
-      data.email
-    );
+    const exists = await this._personService._checkUserExistence(data.email);
 
     if (exists) throw new ConflictException('email or mobile already exists');
 
@@ -124,7 +129,12 @@ export class AuthService {
 
     if (!user) throw new NotFoundException('user not found');
 
-    await this._generateTokenAndSendEmail(false, user._id, email, user.fullName);
+    await this._generateTokenAndSendEmail(
+      false,
+      user._id,
+      email,
+      user.fullName
+    );
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {
@@ -204,6 +214,17 @@ export class AuthService {
     await this._personService.removeRefreshToken(id);
   }
 
+  async getUserAccess(userId: objectId): Promise<UserAccessInterface> {
+    const user = await this._personService.getOne(userId);
+    if (!user) {
+      throw new RpcException('User Not Found');
+    }
+    if (!user.isActive) {
+      throw new RpcException('User Not Acyive');
+    }
+    return { id: user._id.toString(), type: user.badge, name: user.fullName };
+  }
+
   private _generateTokenAndSendEmail(
     isVerifyEmail: boolean,
     id: objectId,
@@ -238,13 +259,13 @@ export class AuthService {
 
   private _getRedisKey(userId: objectId, isVerify: boolean): string {
     return this._redisHelperService.getStandardKey(
-        RedisServiceEnum.Auth,
-        RedisPrefixesEnum.User,
-        isVerify
-          ? RedisSubPrefixesEnum.Verify
-          : RedisSubPrefixesEnum.ResetPassword,
-        userId as string
-      );
+      RedisServiceEnum.Auth,
+      RedisPrefixesEnum.User,
+      isVerify
+        ? RedisSubPrefixesEnum.Verify
+        : RedisSubPrefixesEnum.ResetPassword,
+      userId as string
+    );
   }
 
   private async _validateTokenAndDelete(

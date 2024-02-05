@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package auth;
+
+service AuthService {
+  rpc Authorize(BodyAuthorize) returns (ResponseAuthorize) {}
+}
+
+message BodyAuthorize {
+  string token = 1;
+}
+
+message ResponseAuthorize {
+  string id = 1;
+  string type = 2;
+  string name = 3;
+}

@@ -4,6 +4,7 @@ import { DataSource, Like, MongoRepository } from 'typeorm';
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
 import { UserEntity } from './user.entity';
 import { SearchFilters } from '../../../../dtos';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class UserRepository extends MongoRepository<UserEntity> {
@@ -66,7 +67,7 @@ export class UserRepository extends MongoRepository<UserEntity> {
     conditions?: Partial<Record<keyof UserEntity, any>>
   ): Promise<UserEntity> {
     return this.findOne({
-      where: { id, ...(conditions && { ...conditions }) },
+      where: { _id: new ObjectId(id), ...(conditions && { ...conditions }) },
     });
   }
 

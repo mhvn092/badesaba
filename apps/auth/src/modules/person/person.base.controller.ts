@@ -12,7 +12,6 @@ export class PersonController {
     summary: 'get a user profile',
     outputType: UserEntity,
   })
-  @UseGuards(JwtAuthGuard)
   getProfile(@User() user: UserAuthModel): Promise<UserEntity> {
     return this._personService.getProfile(user._id);
   }

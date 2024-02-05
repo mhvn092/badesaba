@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PersonAdminController } from './person.admin.controller';
-import { PersonController } from './person.controller';
+import { PersonController } from './person.base.controller';
 import { PersonService } from './person.service';
 import {
   ClientEntity,

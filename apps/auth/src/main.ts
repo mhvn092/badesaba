@@ -4,7 +4,9 @@
  */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import { AppConfig, Paginate, appConfig, corsConfig, swaggerConfig } from '@lib/shared';
+import { AppConfig, Paginate, appConfig, corsConfig, grpcConfig, swaggerConfig } from '@lib/shared';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 
 const compression = require('compression');
 
@@ -37,6 +39,19 @@ async function bootstrap() {
       level: 1,
     }),
   );
+
+  const grpcConfiguration = app.get(grpcConfig.KEY);
+  
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: 'auth',
+      url: '0.0.0.0:' + grpcConfiguration.grpcPort,
+      protoPath: join(__dirname, 'assets-shared/auth.proto'),
+    },
+  }, { inheritAppConfig: true });
+
+  await app.startAllMicroservices();
 
   await app.listen(appConfigInstance.port, () => {
     console.log(

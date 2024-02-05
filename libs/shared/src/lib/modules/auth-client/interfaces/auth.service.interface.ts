@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
-import { BadgeEnum } from '../enums';
+import { BadgeEnum } from '../../../enums/badge.enum';
+
 
 export interface BodyAuthorizeInterface {
   token: string;
