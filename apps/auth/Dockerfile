@@ -1,18 +1,15 @@
 # Stage 1: Install dependencies and build application
 FROM node:18-slim as development
 
-# Install and configure pnpm
-RUN npm install -g pnpm
-RUN npm config set registry http://registry.npmjs.org/
-
 # Set working directory
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY package*.json ./
+COPY package.json ./
+COPY yarn.lock ./
 
-# Install dependencies using pnpm
-RUN pnpm install
+# Install dependencies using yarn
+RUN yarn install
 
 # Copy the rest of the application code
 COPY . .
@@ -29,6 +26,7 @@ ENV PORT=3001
 
 # Expose port
 EXPOSE ${PORT}
+EXPOSE 5000
 
 # Create a non-root user
 USER node
@@ -43,7 +41,7 @@ COPY --from=development /app/dist/apps/auth ./dist
 COPY --from=development /app/package*.json ./
 
 # Install only production dependencies
-RUN npm install --only=production
+RUN yarn install --production=true
 
 # Command to run the application
 CMD ["node", "dist/apps/auth/main"]

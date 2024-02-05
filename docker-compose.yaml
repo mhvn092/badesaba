@@ -1,42 +1,44 @@
 version: '3.9'
 services:
-  # auth:
-  #   build:
-  #     dockerfile: ./apps/auth/Dockerfile
-  #     target: development
-  #     context: .
-  #   command: sh -c "npm run serve:auth"
-  #   env_file:
-  #    - ./apps/auth/.env
-  #   expose:
-  #     - 3001
-  #   ports:
-  #     - "4001:3001"
-  #     - "9010:9669"
-  #   depends_on:
-  #     - redis
-  #     - mongo
-  #   volumes:
-  #     - .:/app
-  #     - /app/node_modules
+  auth:
+    build:
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+      context: .
+    command: sh -c "npm run serve:auth"
+    env_file:
+     - ./apps/auth/.env
+    expose:
+      - 3001
+    ports:
+      - "3001:3001"
+      - "5000:5000"
+    depends_on:
+      - redis
+      - mongo
+    volumes:
+      - .:/app
+      - /app/node_modules
 
-  # accounting:
-  #   build:
-  #     dockerfile: ./apps/accounting/Dockerfile
-  #     target: development
-  #     context: .
-  #   command: sh -c "npm run serve:accounting"
-  #   expose:
-  #     - 3002
-  #   ports:
-  #     - "4020:3002"
-  #     - "9020:9669"
-  #   depends_on:
-  #     - redis
-  #     - mongo
-  #   volumes:
-  #     - .:/app
-  #     - /app/node_modules
+  accounting:
+    build:
+      dockerfile: ./apps/accounting/Dockerfile
+      target: development
+      context: .
+    command: sh -c "npm run serve:accounting"
+    expose:
+      - 3002
+    ports:
+      - "3002:3002"
+      - "5001:5001"
+    depends_on:
+      - redis
+      - mongo
+    volumes:
+      - .:/app
+      # @todo @vahidnejad add another container for node modules
+      # only and share it between them
+      - /app/node_modules
 
   mongo:
     image: mongo:latest
@@ -54,7 +56,7 @@ services:
   redis:
     image: redis:latest
     expose:
-      - "6379"
+      - 6379
     command: ["redis-server", "--bind", "redis", "--port", "6379"]
     container_name: redis
     restart: always
