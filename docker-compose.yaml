@@ -19,6 +19,8 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+    networks:
+      - api
 
   accounting:
     build:
@@ -39,11 +41,14 @@ services:
       # @todo @vahidnejad add another container for node modules
       # only and share it between them
       - /app/node_modules
+    networks:
+      - api
 
   mongo:
     image: mongo:latest
     container_name: mongo
     restart: always
+    network_mode: host
     ports:
       - 27017:27017
     logging:
@@ -52,12 +57,15 @@ services:
       # @todo vahidnejad add authentication
     volumes:
       - ~/deps-storage/mongo_volume:/data/db
+    networks:
+      - api
 
   redis:
     image: redis:latest
     expose:
       - 6379
     command: ["redis-server", "--bind", "redis", "--port", "6379"]
+    network_mode: host
     container_name: redis
     restart: always
     volumes:
@@ -66,8 +74,9 @@ services:
       ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - 6379:6379
+    networks:
+      - api
 
 networks:
-  default:
-    name: example_dev_network
+  api:
     driver: bridge
