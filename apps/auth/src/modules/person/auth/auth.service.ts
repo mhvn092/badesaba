@@ -76,7 +76,7 @@ export class AuthService {
     data.password = await this._personService.hashPassword(data.password);
     const exists = await this._personService._checkUserExistence(data.email);
 
-    if (exists) throw new ConflictException('email or mobile already exists');
+    if (exists) throw new ConflictException('email already exists');
 
     return this._personService.createUser(data).then((res) => {
       this._generateTokenAndSendEmail(true, res._id, data.email, res.fullName);

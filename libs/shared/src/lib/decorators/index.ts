@@ -18,3 +18,6 @@ export * from './custom-check-string.decorator';
 export * from './custom-check-number.decorator';
 export * from './custom-check-boolean.decorator';
 export * from './custom-check-enum.decorator';
+export * from './user.decorator';
+export * from './custom-check-object-id.decorator';
+export * from './shared-controller.info.decorator';

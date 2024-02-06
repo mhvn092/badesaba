@@ -71,40 +71,8 @@ export class UserRepository extends MongoRepository<UserEntity> {
     });
   }
 
-  getOneByMobile(mobile: string): Promise<UserEntity> {
-    return this.findOne({
-      where: { mobile },
-    });
-  }
-
-  async getProfileWithTerritory(id: string): Promise<UserEntity> {
-    const user: UserEntity = await this.findOne({
-      where: { id },
-    });
-    if (!user) throw new NotFoundException('کاربر یافت نشد');
-    return user;
-  }
-
   getByEmail(email: string): Promise<UserEntity> {
     return this.findOneBy({ email });
-  }
-
-  async getByMobileOrEmail(email?: string): Promise<number> {
-    return await this.countBy({ email });
-  }
-
-  async changeActive(
-    id: string,
-    action: 'active' | 'deactivate'
-  ): Promise<void> {
-    await this.update(id, { isActive: action === 'active' });
-  }
-
-  async changeVerify(
-    id: string,
-    action: 'verify' | 'unverified'
-  ): Promise<void> {
-    await this.update(id, { isVerified: action === 'verify' });
   }
 
   async getOneOrFail(
@@ -120,8 +88,8 @@ export class UserRepository extends MongoRepository<UserEntity> {
     await this.softDelete(id);
   }
 
-  async add(user: Partial<UserEntity>): Promise<UserEntity> {
-    const newUser: UserEntity = await this.create(user);
+  add(user: Partial<UserEntity>): Promise<UserEntity> {
+    const newUser: UserEntity = this.create(user);
     return this.save(newUser);
   }
 }

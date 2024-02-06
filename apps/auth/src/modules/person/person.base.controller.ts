@@ -1,7 +1,7 @@
-import { AuthControllerInfo, JwtAuthGuard, UpdatePasswordDto, UpdateProfileDto, User } from '@lib/auth';
+import { AuthControllerInfo, UpdatePasswordDto, UpdateProfileDto } from '@lib/auth';
 import { UserEntity } from '@lib/auth/entities';
-import { GetInfo, ModulesEnum, PutInfo, RouteTypeEnum, UserAuthModel } from '@lib/shared';
-import { Body, UseGuards } from '@nestjs/common';
+import { GetInfo, ModulesEnum, PutInfo, RouteTypeEnum, UserAuthModel,User } from '@lib/shared';
+import { Body } from '@nestjs/common';
 import { PersonService } from './person.service';
 
 @AuthControllerInfo(ModulesEnum.Person, 'person', RouteTypeEnum.BASE)
