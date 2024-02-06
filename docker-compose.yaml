@@ -48,7 +48,6 @@ services:
     image: mongo:latest
     container_name: mongo
     restart: always
-    network_mode: host
     ports:
       - 27017:27017
     logging:
@@ -62,11 +61,7 @@ services:
 
   redis:
     image: redis:latest
-    expose:
-      - 6379
     command: ["redis-server", "--bind", "redis", "--port", "6379"]
-    network_mode: host
-    container_name: redis
     restart: always
     volumes:
       - ~/deps-storage/redis_volume:/var/lib/redis
