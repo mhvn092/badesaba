@@ -34,7 +34,8 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "auth:build"
+        "buildTarget": "auth:build",
+        "inspect": false
       },
       "configurations": {
         "development": {

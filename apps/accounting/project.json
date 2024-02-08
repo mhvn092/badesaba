@@ -34,7 +34,8 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "accounting:build"
+        "buildTarget": "accounting:build",
+        "inspect": false
       },
       "configurations": {
         "development": {

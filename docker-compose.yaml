@@ -3,9 +3,9 @@ services:
   auth:
     build:
       dockerfile: ./apps/auth/Dockerfile
-      target: production
+      target: development
       context: .
-    command: sh -c "npm run migration:auth"
+    command: sh -c "npm run migration:auth && npm run serve:auth"
     env_file:
      - ./apps/auth/.env
     expose:
@@ -25,9 +25,9 @@ services:
   accounting:
     build:
       dockerfile: ./apps/accounting/Dockerfile
-      target: production
+      target: development
       context: .
-    command: sh -c "npm run migration:accounting"
+    command: sh -c "npm run serve:accounting"
     expose:
       - 3002
     ports:
@@ -44,27 +44,27 @@ services:
     networks:
       - api
 
-    product:
-      build:
-        dockerfile: ./apps/product/Dockerfile
-        target: production
-        context: .
-      command: sh -c "npm run migration:product"
-      expose:
-        - 3002
-      ports:
-        - "3003:3003"
-        - "5002:5002"
-      depends_on:
-        - redis
-        - mongo
-      volumes:
-        - .:/app
-        # @todo @vahidnejad add another container for node modules
-        # only and share it between them
-        - /app/node_modules
-      networks:
-        - api
+  product:
+    build:
+      dockerfile: ./apps/product/Dockerfile
+      target: development
+      context: .
+    command: sh -c "npm run migration:product && npm run serve:product"
+    expose:
+      - 3002
+    ports:
+      - "3003:3003"
+      - "5002:5002"
+    depends_on:
+      - redis
+      - mongo
+    volumes:
+      - .:/app
+      # @todo @vahidnejad add another container for node modules
+      # only and share it between them
+      - /app/node_modules
+    networks:
+      - api
 
   mongo:
     image: mongo:latest
