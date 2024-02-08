@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PersonService } from '../person.service';
+import { PersonService } from '../person/person.service';
 import {
   AppConfig,
   appConfig,

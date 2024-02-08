@@ -2,7 +2,7 @@ import {
   CreateBookDto,
   SearchBookFiltersDto,
   SelectedBooksResponseDto,
-  UpdateBookDto
+  UpdateBookDto,
 } from '@lib/product';
 import { BookEntity } from '@lib/product/entities';
 import {
@@ -19,6 +19,13 @@ import { Injectable } from '@nestjs/common';
 import { BookRepository } from 'libs/product/src/lib/database/entities/book';
 import { AuthorService } from '../author/author.service';
 import { CategoryService } from '../category/category.service';
+import {
+  GetAvailabilityRequestInterface,
+  GetAvailabilityResponseInterface,
+  ReduceAvailibilityRequestInterface,
+  ReduceAvailibilityResponseInterface,
+} from '@lib/shared/modules/product-client';
+import { In } from 'typeorm';
 
 @Injectable()
 export class BookService {
@@ -104,6 +111,49 @@ export class BookService {
     return this._bookRepository.update(id, updateBookDto).then((res) => ({
       status: !!res.affected,
     }));
+  }
+
+  async getAvailabilities(
+    request: GetAvailabilityRequestInterface
+  ): Promise<GetAvailabilityResponseInterface[]> {
+    const books = await this._bookRepository.find({
+      where: {
+        _id: In(request.bookIds),
+      },
+    });
+    return books?.map((item) => ({
+      bookId: item._id.toString(),
+      avalability: item.availability,
+      price: item.price,
+      name: item.name,
+    }));
+  }
+
+  async reduceAvailabilities(
+    request: ReduceAvailibilityRequestInterface[]
+  ): Promise<ReduceAvailibilityResponseInterface> {
+    const books = await this._bookRepository.find({
+      where: {
+        _id: In(request.map((item) => item.bookId)),
+      },
+    });
+    const promises = [];
+    books.forEach((item) => {
+      const book = request.find((sent) => sent.bookId === item._id.toString());
+      const quantity = item.availability - book.quantity;
+      promises.push(
+        this._bookRepository.update(item._id, {
+          availability: quantity > 0 ? quantity : 0,
+        })
+      );
+    });
+    try {
+      await Promise.all(promises);
+      return { status: true };
+    } catch (e) {
+      console.error('some error happend', e);
+      return { status: false };
+    }
   }
 
   async remove(authorId: objectId): Promise<UpdateResultModel> {

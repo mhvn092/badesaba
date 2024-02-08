@@ -5,7 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtModuleOptions } from '@nestjs/jwt/dist/interfaces/jwt-module-options.interface';
 import { ConfigModule } from '@nestjs/config';
-import { PersonModule } from '../person.module';
+import { PersonModule } from '../person/person.module';
 import { JwtRefreshTokenStrategy } from './strategies/jwt-refresh-token.strategy';
 import { LocalStrategy } from './strategies/local-strategy';
 import { appConfig } from '@lib/shared';

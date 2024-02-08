@@ -4,5 +4,8 @@ export enum ModulesEnum {
   Person = 'Person',
   Category = 'Category',
   Author = 'Author',
-  Book = 'Book'
+  Book = 'Book',
+  Cart = 'Cart',
+  Order = 'Order',
+  Payment = 'Payment'
 }

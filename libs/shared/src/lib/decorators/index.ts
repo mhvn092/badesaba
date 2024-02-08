@@ -21,3 +21,4 @@ export * from './user.decorator';
 export * from './custom-check-object-id.decorator';
 export * from './shared-controller.info.decorator';
 export * from './is-year-validator.decorator';
+export * from './grpc-request';

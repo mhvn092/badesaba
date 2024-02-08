@@ -8,3 +8,4 @@ export * from './modules.enum';
 export * from './validation-status.enum';
 export * from './rpc-methods.enum';
 export * from './rpc-services.enum';
+export * from './rpc-package-name.enum';

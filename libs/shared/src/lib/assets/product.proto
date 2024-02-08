@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package product;
+
+service ProductService {
+  rpc GetAvailability(GetAvailabilityRequest) returns (GetAvailabilityResponseArray) {}
+  rpc ReduceAvailability(ReduceAvailabilityRequestArray) returns (ReduceAvailabilityResponse) {}
+}
+
+message GetAvailabilityRequest {
+  repeated string bookIds = 1;
+}
+
+message GetAvailabilityResponse {
+  string bookId = 1;
+  int32 availability = 2;
+  float price = 3;
+  string name = 4;
+}
+
+message GetAvailabilityResponseArray {
+  repeated GetAvailabilityResponse responses = 1;
+}
+
+
+message ReduceAvailabilityRequest {
+  string bookId = 1;
+  int32 quantity = 2;
+}
+
+message ReduceAvailabilityRequestArray {
+  repeated ReduceAvailabilityRequest rquest = 1;
+}
+
+message ReduceAvailabilityResponse {
+ bool status = 1;
+}

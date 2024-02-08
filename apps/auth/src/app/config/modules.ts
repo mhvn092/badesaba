@@ -4,7 +4,7 @@ import { corsConfig } from '@lib/shared/config/cors.config';
 import { grpcConfig } from '@lib/shared/config/grpc.config';
 import { typeormConfig } from '@lib/shared/modules/shared-typeorm/config/typeorm.config';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from '../../modules/person/auth/auth.module';
+import { AuthModule } from '../../modules/auth/auth.module';
 import { PersonModule } from '../../modules/person/person.module';
 
 export const AUTH_MODULES = [

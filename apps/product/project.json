@@ -1,6 +1,6 @@
 {
   "name": "product",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/product/src",
   "projectType": "application",
   "targets": {

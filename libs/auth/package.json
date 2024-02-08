@@ -1,5 +1,5 @@
 {
-  "name": "@lib-auth",
+  "name": "@lib/auth",
   "version": "0.0.1",
   "type": "commonjs"
 }

@@ -4,7 +4,7 @@
  */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import { AppConfig, Paginate, appConfig, corsConfig, grpcConfig, swaggerConfig } from '@lib/shared';
+import { AppConfig, Paginate, RpcPackageEnum, appConfig, corsConfig, grpcConfig, swaggerConfig } from '@lib/shared';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 
@@ -45,7 +45,7 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      package: 'auth',
+      package: RpcPackageEnum.Auth,
       url: '0.0.0.0:' + grpcConfiguration.grpcPort,
       protoPath: join(__dirname, 'assets-shared/auth.proto'),
     },

@@ -6,6 +6,8 @@ import {
   ResponseAuthorizeInterface,
 } from '../interfaces/auth.service.interface';
 import { firstValueFrom } from 'rxjs';
+import { RpcServicesEnum } from '../../../enums';
+import { AUTH_GRPC_CLIENT_TOKEN } from '../constants/auth-grpc-client-token.constant';
 
 
 @Injectable()
@@ -13,8 +15,8 @@ export class AuthClientService {
 
   private readonly _authService: AuthorizationServiceInterface;
 
-  constructor(@Inject('AUTH_GRPC_CLIENT') private _authClient: ClientGrpc) {
-    this._authService = this._authClient.getService<AuthorizationServiceInterface>('AuthService');
+  constructor(@Inject(AUTH_GRPC_CLIENT_TOKEN) private _authClient: ClientGrpc) {
+    this._authService = this._authClient.getService<AuthorizationServiceInterface>(RpcServicesEnum.AuthService);
   }
 
   authorize(body: BodyAuthorizeInterface): Promise<ResponseAuthorizeInterface> {

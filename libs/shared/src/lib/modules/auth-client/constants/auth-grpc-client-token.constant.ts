@@ -1,0 +1,1 @@
+export const AUTH_GRPC_CLIENT_TOKEN = 'AUTH_GRPC_CLIENT';

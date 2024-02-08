@@ -1,3 +1,4 @@
 export enum RpcServicesEnum {
-    AuthService = 'AuthService'
+    AuthService = 'AuthService',
+    ProductService = 'ProductService'
 }

@@ -1,3 +1,5 @@
 export enum RpcMethodsEnum {
-    Authorize = 'Authorize'
+    Authorize = 'Authorize',
+    GetAvailability = 'GetAvailability',
+    ReduceAvailability = 'ReduceAvailability'
 }

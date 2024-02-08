@@ -9,7 +9,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @Inject(jwtConfig.KEY) private readonly _jwtConfigService: JwtConfig,
   ) {
-    console.log('opiuoqiwe',_jwtConfigService)
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         ExtractJwt.fromAuthHeaderAsBearerToken(),

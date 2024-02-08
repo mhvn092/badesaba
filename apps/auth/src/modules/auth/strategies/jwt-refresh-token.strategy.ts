@@ -2,7 +2,7 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
-import { PersonService } from '../../person.service';
+import { PersonService } from '../../person/person.service';
 import { AuthService } from '../auth.service';
 import { HeaderNames, Payload } from '@lib/shared';
 import { ClientEntity } from '@lib/auth/entities';

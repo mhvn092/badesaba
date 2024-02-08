@@ -6,6 +6,7 @@ import { AuthorModule } from '../author/author.module';
 import { CategoryModule } from '../category/category.module';
 import { BookAdminController } from './book.admin.controller';
 import { BookPublicController } from './book.public.controller';
+import { BookRpcController } from './book.rpc.controller';
 import { BookService } from './book.service';
 
 @Module({
@@ -15,7 +16,7 @@ import { BookService } from './book.service';
     AuthorModule,
     CategoryModule,
   ],
-  controllers: [BookAdminController, BookPublicController],
+  controllers: [BookAdminController, BookPublicController,BookRpcController],
   providers: [BookRepository, BookService],
 })
 export class BookModule {}

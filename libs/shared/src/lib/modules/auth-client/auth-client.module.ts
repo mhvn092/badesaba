@@ -8,18 +8,20 @@ import {
 } from './config/auth-client.config';
 import { AuthClientService } from './services/auth-client.service';
 import { ApiAccessStrategy } from './strategies/access.strategy';
+import { AUTH_GRPC_CLIENT_TOKEN } from './constants/auth-grpc-client-token.constant';
+import { RpcPackageEnum } from '../../enums';
 
 @Module({
   imports: [
     ConfigModule.forFeature(authClientConfig),
     ClientsModule.registerAsync([
       {
-        name: 'AUTH_GRPC_CLIENT',
+        name: AUTH_GRPC_CLIENT_TOKEN,
         imports: [ConfigModule.forFeature(authClientConfig)],
         useFactory: (authClientConfig: AuthClientConfig) => ({
           transport: Transport.GRPC,
           options: {
-            package: 'auth',
+            package: RpcPackageEnum.Auth,
             url: authClientConfig.authGrpcUrl,
             protoPath: join(__dirname, 'assets-shared/auth.proto'),
           },
