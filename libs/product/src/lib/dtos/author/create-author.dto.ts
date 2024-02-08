@@ -5,4 +5,5 @@ export class CreateAuthorDto extends PickType(AuthorEntity, [
   'name',
   'bio',
   'nationality',
+  'isFeatured'
 ] as const) {}

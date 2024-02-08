@@ -57,17 +57,19 @@ export class AuthorRepository extends MongoRepository<AuthorEntity> {
     id: objectId,
     conditions?: Partial<Record<keyof AuthorEntity, any>>
   ): Promise<AuthorEntity> {
-    const user: AuthorEntity = await this.getOne(id, conditions);
-    if (!user) throw new NotFoundException('کاربر یافت نشد');
-    return user;
+    const author: AuthorEntity = await this.getOne(id, conditions);
+    if (!author) throw new NotFoundException('نویسنده یافت نشد');
+    return author;
   }
 
   destroy(id: objectId): Promise<UpdateResultModel> {
-    return this.softDelete(id).then((res) => ({ status: !!res.affected }));
+    return this.update(id, { deletedAt: new Date() }).then((res) => ({
+      status: !!res.affected,
+    }));
   }
 
-  add(user: Partial<AuthorEntity>): Promise<AuthorEntity> {
-    const newInstance: AuthorEntity = this.create(user);
+  add(author: Partial<AuthorEntity>): Promise<AuthorEntity> {
+    const newInstance: AuthorEntity = this.create(author);
     return this.save(newInstance).then((res) =>
       responseWrapper(AuthorEntity, res)
     );

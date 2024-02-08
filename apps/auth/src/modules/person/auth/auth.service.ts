@@ -13,8 +13,6 @@ import {
   appConfig,
   BadgeEnum,
   base64Encode,
-  JwtConfig,
-  jwtConfig,
   objectId,
   Payload,
   randomHex,
@@ -31,10 +29,12 @@ import { EmailService } from './email.service';
 import { ClientEntity, UserEntity } from '@lib/auth/entities';
 import { ObjectId } from 'typeorm';
 import {
+  JwtConfig,
   LoginDto,
   RegisterDto,
   ResetPasswordDto,
   VerifyEmailDto,
+  jwtConfig,
 } from '@lib/auth';
 import { RedisHelperService } from '@lib/shared/modules/redis-helper';
 import { RpcException } from '@nestjs/microservices';

@@ -11,13 +11,13 @@ import { AuthorService } from './author.service';
 export class AuthorPublicController {
   constructor(private readonly _authorService: AuthorService) {}
 
-  @GetInfo('all/works', null, {
-    description: 'this route returns all the works of author Entity',
-    summary: 'get all  authors work ',
+  @GetInfo('featured', null, {
+    description: 'this route returns all the featured author Entities',
+    summary: 'get all featured author ',
     outputType: AuthorEntity,
     outputIsArray: true,
   })
   findAll(): Promise<AuthorEntity[]> {
-    return this._authorService.getAllWithoutPagination();
+    return this._authorService.getAllFeatured();
   }
 }

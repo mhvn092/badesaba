@@ -1,6 +1,6 @@
+import { CheckString, registerConfig } from '@lib/shared';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { registerConfig } from '../utils';
-import { CheckString } from '../decorators';
+
 
 export enum BCRYPT_CONFIG {
   SALT_HASH = 'SALT_HASH',

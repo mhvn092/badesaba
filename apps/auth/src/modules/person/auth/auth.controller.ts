@@ -9,12 +9,13 @@ import {
   SetHeaders,
   TokensDto,
   UpdateResultModel,
+  User,
   UserAgent,
   UserAuthModel,
 } from '@lib/shared';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
-import { AuthControllerInfo, ForgotPasswordDto, LoginDto, RegisterDto, ResetPasswordDto, User, VerifyEmailDto } from '@lib/auth';
+import { AuthControllerInfo, ForgotPasswordDto, LoginDto, RegisterDto, ResetPasswordDto, VerifyEmailDto } from '@lib/auth';
 import { UserEntity } from '@lib/auth/entities';
 
 @AuthControllerInfo(ModulesEnum.Auth, 'auth', RouteTypeEnum.PUBLIC)

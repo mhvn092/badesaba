@@ -57,17 +57,19 @@ export class CategoryRepository extends MongoRepository<CategoryEntity> {
     id: objectId,
     conditions?: Partial<Record<keyof CategoryEntity, any>>
   ): Promise<CategoryEntity> {
-    const user: CategoryEntity = await this.getOne(id, conditions);
-    if (!user) throw new NotFoundException('کاربر یافت نشد');
-    return user;
+    const category: CategoryEntity = await this.getOne(id, conditions);
+    if (!category) throw new NotFoundException('دسته بندی یافت نشد');
+    return category;
   }
 
   destroy(id: objectId): Promise<UpdateResultModel> {
-    return this.softDelete(id).then((res) => ({ status: !!res.affected }));
+    return this.update(id, { deletedAt: new Date() }).then((res) => ({
+      status: !!res.affected,
+    }));
   }
 
-  add(user: Partial<CategoryEntity>): Promise<CategoryEntity> {
-    const newInstance: CategoryEntity = this.create(user);
+  add(category: Partial<CategoryEntity>): Promise<CategoryEntity> {
+    const newInstance: CategoryEntity = this.create(category);
     return this.save(newInstance).then((res) =>
       responseWrapper(CategoryEntity, res)
     );

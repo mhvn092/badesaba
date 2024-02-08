@@ -6,4 +6,5 @@ export enum RedisSubPrefixesEnum {
   Id = 'id',
   Customer = 'customer',
   Profile = 'profile',
+  Selected = 'selected'
 }

@@ -4,8 +4,9 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { PersonService } from '../../person.service';
 import { AuthService } from '../auth.service';
-import { HeaderNames, JwtConfig, Payload, jwtConfig } from '@lib/shared';
+import { HeaderNames, Payload } from '@lib/shared';
 import { ClientEntity } from '@lib/auth/entities';
+import { JwtConfig, jwtConfig } from '@lib/auth';
 
 @Injectable()
 export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {

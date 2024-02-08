@@ -17,7 +17,7 @@ import {
   UpdateResultModel,
   objectId,
 } from '@lib/shared';
-import { Body, Param, ParseUUIDPipe } from '@nestjs/common';
+import { Body, Param } from '@nestjs/common';
 import { AuthorService } from './author.service';
 
 @SharedControllerInfo(ModulesEnum.Author, 'author', RouteTypeEnum.ADMIN)
@@ -61,7 +61,7 @@ export class AuthorAdminController {
     summary: 'get one city',
     outputType: AuthorEntity,
   })
-  findOne(@Param('id', ParseUUIDPipe) id: objectId): Promise<AuthorEntity> {
+  findOne(@Param('id') id: objectId): Promise<AuthorEntity> {
     return this._authorService.findOne(id);
   }
 
@@ -71,7 +71,7 @@ export class AuthorAdminController {
     outputType: UpdateResultModel,
   })
   update(
-    @Param('id', ParseUUIDPipe) id: objectId,
+    @Param('id') id: objectId,
     @Body() udateAuthorDto: UpdateAuthorDto
   ): Promise<UpdateResultModel> {
     return this._authorService.update(id, udateAuthorDto);
@@ -81,7 +81,7 @@ export class AuthorAdminController {
     summary: 'delete oneAuthorEntity',
     description: 'this route deletes oneAuthorEntity',
   })
-  remove(@Param('id', ParseUUIDPipe) id: objectId): Promise<UpdateResultModel> {
+  remove(@Param('id') id: objectId): Promise<UpdateResultModel> {
     return this._authorService.remove(id);
   }
 }

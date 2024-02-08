@@ -1,5 +1,6 @@
+import { registerConfig } from '@lib/shared';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { registerConfig } from '../utils';
+
 
 export enum JWT_CONFIG {
   JWT_ACCESS_TOKEN_SECRET = 'JWT_ACCESS_TOKEN_SECRET',

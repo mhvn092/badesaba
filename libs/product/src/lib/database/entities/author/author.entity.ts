@@ -1,4 +1,9 @@
-import { CheckEnum, CheckString, SharedBaseEntity } from '@lib/shared';
+import {
+  CheckBoolean,
+  CheckEnum,
+  CheckString,
+  SharedBaseEntity,
+} from '@lib/shared';
 import { Entity } from 'typeorm';
 import { NationalityEnum } from '../../../enums';
 
@@ -14,7 +19,10 @@ export class AuthorEntity extends SharedBaseEntity {
   @CheckString()
   bio: string;
 
-  // i could have made this into another entity and just give a refrence 
+  @CheckBoolean()
+  isFeatured: boolean;
+
+  // i could have made this into another entity and just give a refrence
   // to it so that we could insert as needed
 
   @CheckEnum(NationalityEnum, true, true, NationalityEnum.Iranian)

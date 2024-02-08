@@ -86,13 +86,6 @@
       "options": {
         "command": "npm run typeorm -- migration:revert -t each -d libs/accounting/src/lib/database/data-source.ts"
       }
-    },
-    "migration:generate": {
-      "executor": "nx:run-commands",
-      "outputs": [],
-      "options": {
-        "command": "npm run typeorm -- migration:generate -d libs/accounting/src/lib/database/data-source.ts libs/accounting/src/lib/database/migrations/{args.entity}"
-      }
     }
   },
   "tags": ["accounting"]

@@ -7,19 +7,18 @@ import {
   UserRepository,
 } from '@lib/auth/entities';
 import {
-  BadgeEnum,
-  BcryptConfig,
   OrderDto,
   PaginationDto,
-  bcryptConfig,
   objectId,
   responseWrapper,
 } from '@lib/shared';
 import {
+  BcryptConfig,
   RegisterDto,
   SearchFilters,
   UpdatePasswordDto,
   UpdateProfileDto,
+  bcryptConfig,
 } from '@lib/auth';
 import { ObjectId } from 'mongodb';
 

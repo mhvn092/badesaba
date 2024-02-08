@@ -10,7 +10,7 @@ import {
   UserEntity,
   UserRepository,
 } from '@lib/auth/entities';
-import { bcryptConfig } from '@lib/shared/config/bcrypt.config';
+import { bcryptConfig } from '@lib/auth';
 
 @Module({
   imports: [

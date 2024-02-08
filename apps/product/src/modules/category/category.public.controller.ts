@@ -11,13 +11,13 @@ import { CategoryService } from './category.service';
 export class CategoryPublicController {
   constructor(private readonly _categoryService: CategoryService) {}
 
-  @GetInfo('all', null, {
+  @GetInfo('featured', null, {
     description: 'this route returns all the CategoryEntity',
     summary: 'get all  categories ',
     outputType: CategoryEntity,
     outputIsArray: true,
   })
   findAll(): Promise<CategoryEntity[]> {
-    return this._categoryService.getAllWithoutPagination();
+    return this._categoryService.getFeatured();
   }
 }

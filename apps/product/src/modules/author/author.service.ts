@@ -10,21 +10,23 @@ import {
   objectId,
 } from '@lib/shared';
 import { RedisHelperService } from '@lib/shared/modules/redis-helper';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { BookRepository } from 'libs/product/src/lib/database/entities/book';
 
 @Injectable()
 export class AuthorService {
   constructor(
     private readonly _authorRepository: AuthorRepository,
+    private readonly _bookRepository: BookRepository,
     private readonly _redisHelperService: RedisHelperService
   ) {}
 
-  async create(createCategoryDto: CreateAuthorDto): Promise<AuthorEntity> {
+  async create(createAuthorDto: CreateAuthorDto): Promise<AuthorEntity> {
     this._deleteAllRedisCache();
-    return this._authorRepository.add(createCategoryDto);
+    return this._authorRepository.add(createAuthorDto);
   }
 
-  async getAllWithoutPagination(): Promise<AuthorEntity[]> {
+  async getAllFeatured(): Promise<AuthorEntity[]> {
     const key = this._getAllRedisKey();
     const resultFromRedis = await this._redisHelperService.getCache<
       AuthorEntity[]
@@ -32,7 +34,9 @@ export class AuthorService {
 
     if (resultFromRedis?.length) return resultFromRedis;
 
-    const resultFromDb = await this._authorRepository.find();
+    const resultFromDb = await this._authorRepository.find({
+      where: { isFeatured: true },
+    });
 
     if (!resultFromDb?.length) return;
 
@@ -60,20 +64,18 @@ export class AuthorService {
 
     this._deleteAllRedisCache();
 
-    return this._authorRepository
-      .update(id, updateAuthorDto)
-      .then((res) => ({
-        status: !!res.affected
-      }));
+    return this._authorRepository.update(id, updateAuthorDto).then((res) => ({
+      status: !!res.affected,
+    }));
   }
 
   async remove(authorId: objectId): Promise<UpdateResultModel> {
     await this._authorRepository.getOneOrFail(authorId);
 
-    // const relatedBook = await this._activityRepository.findOneBy({ activityCategoryId });
-    // if (relatedActivity) {
-    //   throw new BadRequestException('there is related activity to this category');
-    // }
+    const relatedBook = await this._bookRepository.findOneBy({ authorId });
+    if (relatedBook) {
+      throw new BadRequestException('there is related book to this author');
+    }
     this._deleteAllRedisCache();
 
     return this._authorRepository.destroy(authorId);

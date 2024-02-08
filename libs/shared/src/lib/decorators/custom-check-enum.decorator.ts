@@ -14,7 +14,7 @@ export function CheckEnum(
     ...getOptionalDecorators(nullable, 'enum', enumType),
     ...(forEntity
       ? [
-          Column({
+          Column('enum',{
             nullable,
             enum: enumType,
             ...(defaultValue && { default: defaultValue }),

@@ -10,12 +10,15 @@ import {
   objectId,
 } from '@lib/shared';
 import { RedisHelperService } from '@lib/shared/modules/redis-helper';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { BookRepository } from 'libs/product/src/lib/database/entities/book';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class CategoryService {
   constructor(
     private readonly _categoryRepository: CategoryRepository,
+    private readonly _bookRepository: BookRepository,
     private readonly _redisHelperService: RedisHelperService
   ) {}
 
@@ -24,7 +27,7 @@ export class CategoryService {
     return this._categoryRepository.add(createCategoryDto);
   }
 
-  async getAllWithoutPagination(): Promise<CategoryEntity[]> {
+  async getFeatured(): Promise<CategoryEntity[]> {
     const key = this._getAllRedisKey();
     const resultFromRedis = await this._redisHelperService.getCache<
       CategoryEntity[]
@@ -32,7 +35,9 @@ export class CategoryService {
 
     if (resultFromRedis?.length) return resultFromRedis;
 
-    const resultFromDb = await this._categoryRepository.find();
+    const resultFromDb = await this._categoryRepository.find({
+      where: { isFeatured: true },
+    });
 
     if (!resultFromDb?.length) return;
 
@@ -63,17 +68,19 @@ export class CategoryService {
     return this._categoryRepository
       .update(id, updateCategoryDto)
       .then((res) => ({
-        status: !!res.affected
+        status: !!res.affected,
       }));
   }
 
   async remove(categoryId: objectId): Promise<UpdateResultModel> {
     await this._categoryRepository.getOneOrFail(categoryId);
 
-    // const relatedBook = await this._activityRepository.findOneBy({ activityCategoryId });
-    // if (relatedActivity) {
-    //   throw new BadRequestException('there is related activity to this category');
-    // }
+    const relatedBook = await this._bookRepository.findOneBy({
+      categoryId: new ObjectId(categoryId),
+    });
+    if (relatedBook) {
+      throw new BadRequestException('there is related book to this category');
+    }
     this._deleteAllRedisCache();
 
     return this._categoryRepository.destroy(categoryId);

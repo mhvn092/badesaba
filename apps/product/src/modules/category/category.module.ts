@@ -5,13 +5,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryAdminController } from './category.admin.controller';
 import { CategoryPublicController } from './category.public.controller';
 import { CategoryService } from './category.service';
+import { BookRepository } from 'libs/product/src/lib/database/entities/book';
 
 @Module({
   imports: [TypeOrmModule.forFeature([CategoryEntity]), RedisHelperModule],
   controllers: [CategoryAdminController,CategoryPublicController],
   providers: [
     CategoryRepository,
-    CategoryService
+    CategoryService,
+    BookRepository
   ],
+  exports:[CategoryService]
 })
 export class CategoryModule {}

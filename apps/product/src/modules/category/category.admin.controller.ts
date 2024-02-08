@@ -1,5 +1,5 @@
-import { Body, Param, ParseUUIDPipe } from '@nestjs/common';
-import { CategoryService } from './category.service';
+import { CreateCategoryDto, UpdateCategoryDto } from '@lib/product';
+import { CategoryEntity } from '@lib/product/entities';
 import {
   DeleteInfo,
   GetInfo,
@@ -17,8 +17,8 @@ import {
   UpdateResultModel,
   objectId,
 } from '@lib/shared';
-import { CreateCategoryDto, UpdateCategoryDto } from '@lib/product';
-import { CategoryEntity } from '@lib/product/entities';
+import { Body, Param } from '@nestjs/common';
+import { CategoryService } from './category.service';
 
 @SharedControllerInfo(ModulesEnum.Category, 'category', RouteTypeEnum.ADMIN)
 export class CategoryAdminController {
@@ -61,7 +61,7 @@ export class CategoryAdminController {
     summary: 'get one city',
     outputType: CategoryEntity,
   })
-  findOne(@Param('id', ParseUUIDPipe) id: objectId): Promise<CategoryEntity> {
+  findOne(@Param('id') id: objectId): Promise<CategoryEntity> {
     return this._categoryService.findOne(id);
   }
 
@@ -71,7 +71,7 @@ export class CategoryAdminController {
     outputType: UpdateResultModel,
   })
   update(
-    @Param('id', ParseUUIDPipe) id: objectId,
+    @Param('id') id: objectId,
     @Body() updateCategoryDto: UpdateCategoryDto
   ): Promise<UpdateResultModel> {
     return this._categoryService.update(id, updateCategoryDto);
@@ -81,7 +81,7 @@ export class CategoryAdminController {
     summary: 'delete oneCategoryEntity',
     description: 'this route deletes oneCategoryEntity',
   })
-  remove(@Param('id', ParseUUIDPipe) id: objectId): Promise<UpdateResultModel> {
+  remove(@Param('id') id: objectId): Promise<UpdateResultModel> {
     return this._categoryService.remove(id);
   }
 }

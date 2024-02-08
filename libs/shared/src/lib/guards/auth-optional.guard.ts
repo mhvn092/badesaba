@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthAccessGuard, HeaderNames } from '@lib/shared';
+import { AuthAccessGuard } from './auth-access.guard';
+import { HeaderNames } from '../enums/header-name.enum';
 
 
 /**

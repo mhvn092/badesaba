@@ -28,6 +28,7 @@ export class SharedTypeOrmModule {
               synchronize: false,
               authSource: typeormConfigService.mongoAuthSource,
               logging: typeormConfigService.logging as any,
+              logger:'simple-console',
             }
           },
           inject: [typeormConfig.KEY],
