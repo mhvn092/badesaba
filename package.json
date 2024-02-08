@@ -9,7 +9,11 @@
     "build:product": "npx nx build product",
     "serve:auth": "npx nx serve auth",
     "serve:accounting": "npx nx serve accounting",
-    "serve:product": "npx nx serve product"
+    "serve:product": "npx nx serve product",
+    "migration:auth":"npx nx migration:run auth",
+    "migration:product":"npx nx migration:run product",
+    "migration:accounting":"npx nx migration:run accounting"
+
   },
   "private": true,
   "dependencies": {
