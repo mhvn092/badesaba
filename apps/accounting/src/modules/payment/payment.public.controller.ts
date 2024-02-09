@@ -18,10 +18,10 @@ export class PaymentPublicController {
       outputType: null,
     },
     'Authority',
-    String,
+    String
   )
   async verify(
-    @Param('paymentId', ParseUUIDPipe) paymentId: objectId,
+    @Param('paymentId') paymentId: objectId,
     @Query('Authority') authority: string,
     @Res() res: Response,
   ): Promise<void> {

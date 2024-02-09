@@ -28,7 +28,7 @@ export class BookRpcController {
 
   @GrpcMethod(RpcServicesEnum.ProductService, RpcMethodsEnum.ReduceAvailability)
   async reduceAvailibilites(
-    @GrpcRequest() request: ReduceAvailibilityRequestInterface[]
+    @GrpcRequest() request: ReduceAvailibilityRequestInterface
   ): Promise<ReduceAvailibilityResponseInterface> {
     return this._bookService.reduceAvailabilities(request);
   }

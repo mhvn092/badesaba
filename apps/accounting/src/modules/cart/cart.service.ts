@@ -187,16 +187,15 @@ export class CartService {
   }
 
   async deActiveCart(cartId: objectId, session: ClientSession) {
-    await this._cartRepository.updateOne(
-      { _id: { $eq: new ObjectId(cartId) } },
+    await this._cartRepository.update(new ObjectId(cartId),
       { isActive: false },
-      { session }
+      // { session }
     );
 
-    await this._cartItemRepository.updateMany(
-      { cartId: { $eq: new ObjectId(cartId) } },
+    await this._cartItemRepository.update(
+      { cartId: new ObjectId(cartId)  },
       { isActive: false },
-      { session }
+      // { session }
     );
   }
 

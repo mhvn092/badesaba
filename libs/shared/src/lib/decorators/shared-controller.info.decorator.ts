@@ -1,8 +1,9 @@
-import { applyDecorators, Controller, UseGuards } from '@nestjs/common';
+import { applyDecorators, Controller, SetMetadata, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { getRouteWithPrefix } from '../utils';
 import { ModulesEnum, RouteTypeEnum } from '../enums';
 import { AuthAccessGuard, AuthOptionalGuard } from '../guards';
+import { ROUTE_METADATA } from '../constants';
 
 
 export function SharedControllerInfo(
@@ -15,6 +16,7 @@ export function SharedControllerInfo(
   const decorators: Array<ClassDecorator | MethodDecorator | PropertyDecorator> = [
     ApiTags(module as string),
     Controller(routePath),
+    SetMetadata(ROUTE_METADATA, routeType),
   ];
 
   /**

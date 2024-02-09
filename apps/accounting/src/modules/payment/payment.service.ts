@@ -83,10 +83,13 @@ export class PaymentService {
     data: Partial<PaymentEntity>,
     session: ClientSession
   ): Promise<objectId> {
-    const payment = await this._paymentRepository.insertOne(data, {
-      session,
-    });
-    return payment.insertedId;
+    const payment = await this._paymentRepository.save(
+      data
+      //    {
+      //   session,
+      // }
+    );
+    return payment._id;
   }
 
   public async payVerifyLogic(
@@ -112,7 +115,7 @@ export class PaymentService {
       redirectParams = new URLSearchParams({
         status: '0',
         message: result.message || result.error.message,
-        paymentId: result.paymentId.toString(),
+        paymentId: result.paymentId?.toString(),
       });
     }
 
@@ -131,10 +134,18 @@ export class PaymentService {
       authority,
       paymentId
     );
+
     const clientHost = this._appConfig.clientHost + '/' + 'pay-verify';
     if (!payment) {
       return new VerifyPaymentDto({
         error: new BadRequestException('پرداخت یافت نشد'),
+        callback: clientHost,
+      });
+    }
+
+    if(payment.status === PaymentStatusEnum.Verified){
+      return new VerifyPaymentDto({
+        error: new BadRequestException('پرداخت قبلا تایید شده است '),
         callback: clientHost,
       });
     }
@@ -185,49 +196,49 @@ export class PaymentService {
   }
 
   private async _verifyTransaction(payment: PaymentEntity) {
-    const session =
-      this.entityManager.mongoQueryRunner.databaseConnection.startSession();
+    // const session =
+    //   this.entityManager.mongoQueryRunner.databaseConnection.startSession();
 
-    session.startTransaction();
+    // session.startTransaction();
 
     try {
-      await this._orderRepositroy.updateOne(
+      await this._orderRepositroy.update(
         { _id: new ObjectId(payment.orderId) },
         {
           status: OrderStatusEnum.PaymentCompleted,
           isPaymentCleared: true,
-        },
-        {
-          session,
         }
+        // {
+        //   session,
+        // }
       );
 
-      await this._paymentRepository.updateOne(
+      await this._paymentRepository.update(
         payment._id,
         {
           status: PaymentStatusEnum.Verified,
           paidDate: new Date(),
           isCleared: true,
-        },
-        { session }
+        }
+        // { session }
       );
 
-      await session.commitTransaction();
+      // await session.commitTransaction();
     } catch (e) {
-      await session.abortTransaction();
-      throw new InternalServerErrorException('could not create payment');
+      // await session.abortTransaction();
+      throw new InternalServerErrorException('could not verify payment');
     } finally {
-      await session.endSession();
+      // await session.endSession();
     }
     const order = await this._orderRepositroy.getOneOrFail(payment.orderId);
     try {
-      const result = await this._productClientService.ReduceAvailability(
-        order.items.map((item) => ({
+      const result = await this._productClientService.ReduceAvailability({
+        request: order.items.map((item) => ({
           bookId: item.bookId.toString(),
           quantity: item.quantity,
-        }))
-      );
-      
+        })),
+      });
+
       if (result.status) {
         await this._orderRepositroy.update(payment.orderId, {
           reductionDone: true,

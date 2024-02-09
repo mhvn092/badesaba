@@ -19,11 +19,11 @@ import { FinishOrderDto } from '@lib/accounting';
 import { Body, Param } from '@nestjs/common';
 
 @SharedControllerInfo(ModulesEnum.Order, 'order', RouteTypeEnum.ADMIN)
-export class PaymentAdminController {
+export class OrderAdminController {
   constructor(private readonly _orderService: OrderService) {}
 
   @GetWithPaginationInfo(
-    'needs-action',
+    'all',
     {
       description:
         'this route returns all payments requested with optional filters',

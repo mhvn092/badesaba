@@ -1,11 +1,13 @@
 import { JwtPayload } from 'jsonwebtoken';
 import { ObjectId } from 'typeorm';
+import { BadgeEnum } from '../enums';
 
 export interface Payload extends Pick<JwtPayload, 'iat' | 'exp'> {
   _id: ObjectId;
   email: string;
   isActive: boolean;
   clientId?: string;
+  badge:BadgeEnum
 }
 
 export interface AccessToken {

@@ -28,7 +28,7 @@ message ReduceAvailabilityRequest {
 }
 
 message ReduceAvailabilityRequestArray {
-  repeated ReduceAvailabilityRequest requests = 1;
+  repeated ReduceAvailabilityRequest request = 1;
 }
 
 message ReduceAvailabilityResponse {

@@ -1,6 +1,6 @@
-import { PickType } from '@nestjs/swagger';
-import { OrderEntity } from '../../database/entities/order';
+import { CheckString } from '@lib/shared';
 
-export class FinishOrderDto extends PickType(OrderEntity, [
-  'deliveryTrackingCode',
-] as const) {}
+export class FinishOrderDto {
+  @CheckString(false)
+  deliveryTrackingCode: string;
+}

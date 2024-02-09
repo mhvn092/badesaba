@@ -119,7 +119,7 @@ export class BookService {
   ): Promise<GetAvailabilityResponseItemInterface[]> {
     const books = await this._bookRepository.find({
       where: {
-        _id: { $in: request.bookIds.map(item => new ObjectId(item)) },
+        _id: { $in: request.bookIds.map((item) => new ObjectId(item)) },
       },
     });
     return books?.map((item) => ({
@@ -130,28 +130,28 @@ export class BookService {
     }));
   }
 
-  async reduceAvailabilities(
-    request: ReduceAvailibilityRequestInterface[]
-  ): Promise<ReduceAvailibilityResponseInterface> {
+  async reduceAvailabilities({
+    request,
+  }: ReduceAvailibilityRequestInterface): Promise<ReduceAvailibilityResponseInterface> {
     const books = await this._bookRepository.find({
       where: {
-        _id: In(request.map((item) => item.bookId)),
+        _id: {$in:request.map((item) => new ObjectId(item.bookId))},
       },
     });
     const promises = [];
-    books.forEach((item) => {
+    books?.forEach((item) => {
       const book = request.find((sent) => sent.bookId === item._id.toString());
       const quantity = item.availability - book.quantity;
       promises.push(
         this._bookRepository.update(item._id, {
           availability: quantity > 0 ? quantity : 0,
-          salesCount: item.salesCount + quantity,
+          salesCount: item.salesCount ? item.salesCount + book.quantity : book.quantity,
         })
       );
     });
     try {
       await Promise.all(promises);
-      this._deleteSelectedRedisCache()
+      this._deleteSelectedRedisCache();
       return { status: true };
     } catch (e) {
       console.error('some error happend', e);

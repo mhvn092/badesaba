@@ -29,7 +29,7 @@ export class ProductClientService {
     return firstValueFrom(observable);
   }
 
-  ReduceAvailability(body: ReduceAvailibilityRequestInterface[]): Promise<ReduceAvailibilityResponseInterface> {
+  ReduceAvailability(body: ReduceAvailibilityRequestInterface): Promise<ReduceAvailibilityResponseInterface> {
     const observable = this._productService.ReduceAvailability(body);
     return firstValueFrom(observable);
   }

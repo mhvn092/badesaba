@@ -1,12 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import {
-  DataSource,
-  FindManyOptions,
-  MongoRepository,
-  ObjectId,
-} from 'typeorm';
+import { DataSource, FindManyOptions, MongoRepository } from 'typeorm';
 import { PaymentEntity } from './payment.entity';
 import { OrderDto, PaginationDto, objectId } from '@lib/shared';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class PaymentRepository extends MongoRepository<PaymentEntity> {
@@ -22,7 +18,6 @@ export class PaymentRepository extends MongoRepository<PaymentEntity> {
     return payment;
   }
 
-
   async getUserPaymentsWithPagination(
     pagination: PaginationDto,
     order: OrderDto,
@@ -31,7 +26,7 @@ export class PaymentRepository extends MongoRepository<PaymentEntity> {
     const options = {
       where: {
         userId: { $eq: userId },
-      }
+      },
     };
 
     return this._getAllWithPagination(pagination, order, options);
@@ -50,14 +45,12 @@ export class PaymentRepository extends MongoRepository<PaymentEntity> {
     await this.update(id, { authority });
   }
 
-
   async getByAuthority(authority: string, paymentId = null) {
-    return this.findOne({
-      where: {
-        authority:{$eq: authority},
-        ...(paymentId && { _id: new ObjectId(paymentId) }),
-      },
-    });
+    return this.findOneBy({
+        authority: { $eq: authority },
+        ...(paymentId && { _id: { $eq: new ObjectId(paymentId) } }),
+      })
+    
   }
 
   private _getAllWithPagination(

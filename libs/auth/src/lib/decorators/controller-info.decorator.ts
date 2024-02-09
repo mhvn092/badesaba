@@ -1,6 +1,6 @@
-import { applyDecorators, Controller, UseGuards } from '@nestjs/common';
+import { applyDecorators, Controller, SetMetadata, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { getRouteWithPrefix, ModulesEnum, RouteTypeEnum } from '@lib/shared';
+import { getRouteWithPrefix, ModulesEnum, ROUTE_METADATA, RouteTypeEnum } from '@lib/shared';
 import { JwtAuthGuard, OptionalGuard } from '../guards';
 
 export function AuthControllerInfo(
@@ -13,6 +13,7 @@ export function AuthControllerInfo(
   const decorators: Array<ClassDecorator | MethodDecorator | PropertyDecorator> = [
     ApiTags(module as string),
     Controller(routePath),
+    SetMetadata(ROUTE_METADATA, routeType),
   ];
 
   /**

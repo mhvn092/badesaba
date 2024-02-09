@@ -12,10 +12,13 @@ import { OrderStatusEnum } from '../../../enums';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { CartItemEntity } from '../cart-item';
 
-export class OrderItemEntity extends PickType(CartItemEntity, [
-  'bookId',
-  'quantity',
-] as const) {
+export class OrderItemEntity  {
+  @CheckNumber()
+  quantity: number;
+
+  @CheckObjectId('bookId')
+  bookId: objectId;
+
   @CheckObjectId('cartItemId')
   cartItemId: objectId;
 

@@ -4,9 +4,13 @@ export interface GetAvailabilityRequestInterface {
   bookIds: string[];
 }
 
-export interface ReduceAvailibilityRequestInterface {
+export interface ReduceAvailibilityRequestItemInterface {
   bookId: string;
   quantity: number;
+}
+
+export interface ReduceAvailibilityRequestInterface {
+  request: ReduceAvailibilityRequestItemInterface[]
 }
 
 export interface ReduceAvailibilityResponseInterface {
@@ -30,6 +34,6 @@ export interface ProductServiceInterface {
   ) => Observable<GetAvailabilityResponseInterface>;
 
   ReduceAvailability: (
-    body: ReduceAvailibilityRequestInterface[]
+    body: ReduceAvailibilityRequestInterface
   ) => Observable<ReduceAvailibilityResponseInterface>;
 }

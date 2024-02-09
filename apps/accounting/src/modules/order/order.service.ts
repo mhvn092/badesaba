@@ -84,9 +84,9 @@ export class OrderService {
 
     const totalPrice = orderItems.reduce((acc, item) => item.price + acc, 0);
     const orderInstance = this._orderRepository.create({
-      cartId,
+      cartId: cart._id,
       status: OrderStatusEnum.WaitingForPayment,
-      userId,
+      userId: cart.userId,
       totalItems: orderItems.length + 1,
       userAddress,
       totalPrice,
@@ -97,46 +97,52 @@ export class OrderService {
     orderInstance.items = orderItems;
 
     /*
-    * really crappy way to do transactions in mongo with typeorm
+    * to do transactions in mongo with typeorm
     @see https://github.com/typeorm/typeorm/issues/3051
     */
-    const session =
-      this.entityManager.mongoQueryRunner.databaseConnection.startSession();
+    // const session =
+    //   this.entityManager.mongoQueryRunner.databaseConnection.startSession();
 
-    session.startTransaction();
+    // session.startTransaction();
     let paymentId;
 
     try {
-      const order = await this._orderRepository.insertOne(orderInstance, {
-        session,
-      });
-      await this._cartService.deActiveCart(cartId, session);
+      const order = await this._orderRepository.save(
+        orderInstance
+        //   {
+        //   session,
+        // }
+      );
+      await this._cartService.deActiveCart(
+        cartId,
+        null // session
+      );
       const paymentInstance: Partial<PaymentEntity> = {
         price: totalPrice,
         status: PaymentStatusEnum.Created,
-        userId,
-        orderId: order.insertedId,
-        isCleared: false
+        userId: cart.userId,
+        orderId: order._id,
+        isCleared: false,
       };
       paymentId = await this._paymentService.insertPayment(
         paymentInstance,
-        session
+        null // session
       );
 
-      await this._orderRepository.updateOne(
-        order.insertedId,
-        { paymentId },
-        { session }
+      await this._orderRepository.update(
+        order._id,
+        { paymentId }
+        // { session }
       );
 
-      await session.commitTransaction();
+      // await session.commitTransaction();
     } catch (e) {
-      console.error('error in transaction happend',e)
-      await session.abortTransaction();
+      console.error('error in transaction happend', e);
+      // await session.abortTransaction();
 
       throw new InternalServerErrorException('could not create payment');
     } finally {
-      await session.endSession();
+      // await session.endSession();
     }
 
     return this._paymentService.initializeGateway(

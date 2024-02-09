@@ -6,6 +6,7 @@ import {
   randomHex,
   randomNumber,
 } from '@lib/shared';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class GatewayService {
@@ -60,13 +61,13 @@ export class GatewayService {
 
   async verify(
     paymentId: objectId,
-    customerId: objectId,
+    userId: objectId,
     authority: string,
     merchantId: string
   ): Promise<PaymentEntity> {
     const paymentEntity = await this._paymentRepository.getOneOrFail(
       paymentId,
-      customerId
+      userId
     );
 
     const data = {
@@ -85,8 +86,8 @@ export class GatewayService {
 
     const trackingCode = randomNumber(1, 10000000).toString();
 
-    paymentEntity.trackingCode = trackingCode;
-    await this._paymentRepository.update(paymentId, { trackingCode });
+    paymentEntity['trackingCode'] = trackingCode;
+    await this._paymentRepository.update(new ObjectId(paymentId), { trackingCode });
 
     return paymentEntity;
   }

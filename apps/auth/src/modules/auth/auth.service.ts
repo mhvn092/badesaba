@@ -291,6 +291,7 @@ export class AuthService {
       email: user.email,
       isActive: user.isActive,
       clientId: user?.clientId,
+      badge: user?.badge
     };
   }
 
