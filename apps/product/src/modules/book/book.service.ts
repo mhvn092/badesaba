@@ -151,6 +151,7 @@ export class BookService {
     });
     try {
       await Promise.all(promises);
+      this._deleteSelectedRedisCache()
       return { status: true };
     } catch (e) {
       console.error('some error happend', e);
