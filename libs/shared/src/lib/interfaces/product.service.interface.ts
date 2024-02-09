@@ -10,21 +10,24 @@ export interface ReduceAvailibilityRequestInterface {
 }
 
 export interface ReduceAvailibilityResponseInterface {
-  status:boolean
+  status: boolean
 }
 
 
-export interface GetAvailabilityResponseInterface {
-  avalability: number;
+export interface GetAvailabilityResponseItemInterface {
+  availability: number;
   price: number;
   bookId: string;
   name: string;
 }
 
+export interface GetAvailabilityResponseInterface {
+  response: GetAvailabilityResponseItemInterface[]
+}
 export interface ProductServiceInterface {
   GetAvailability: (
     body: GetAvailabilityRequestInterface
-  ) => Observable<GetAvailabilityResponseInterface[]>;
+  ) => Observable<GetAvailabilityResponseInterface>;
 
   ReduceAvailability: (
     body: ReduceAvailibilityRequestInterface[]

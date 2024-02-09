@@ -5,18 +5,17 @@ import {
 } from '@lib/accounting';
 import {
   CartEntity,
+  CartItemEntity,
   CartItemRepository,
   CartRepository,
-  OrderEntity,
-  OrderItemEntity,
+  OrderItemEntity
 } from '@lib/accounting/entities';
-import { UpdateResultModel, objectId } from '@lib/shared';
+import { UpdateResultModel, objectId, responseWrapper } from '@lib/shared';
 import { ProductClientService } from '@lib/shared/modules/product-client/services/product-client.service';
 import {
   BadRequestException,
-  ForbiddenException,
   Injectable,
-  InternalServerErrorException,
+  InternalServerErrorException
 } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 import { ClientSession } from 'typeorm';
@@ -31,30 +30,30 @@ export class CartService {
 
   getActiveCart(userId: objectId) {
     return this._cartRepository.findOneBy({
-      userId: { $eq: userId },
+      userId: { $eq: new ObjectId(userId) },
       isActive: { $eq: true },
     });
   }
 
   async getAllCartItems(userId: objectId): Promise<CartItemResponseDto[]> {
     const cart = await this.getActiveCart(userId);
+
     if (!cart) return [];
 
     const cartItems = await this._cartItemRepository.getByCartId(
       cart._id,
       userId
-    );
-
+    ).then(res => responseWrapper(CartItemEntity,res))
     if (!cartItems?.length) return [];
 
     // since the front wants to show the data to the user
 
     try {
-      const data = await this._productClientService.GetAvailability({
-        bookIds: cartItems.map((item) => item._id.toString()),
+      const { response } = await this._productClientService.GetAvailability({
+        bookIds: cartItems.map((item) => item.bookId?.toString()),
       });
 
-      if (!data?.length)
+      if (!response?.length)
         return cartItems.map((item) => ({
           ...item,
           name: '',
@@ -63,10 +62,10 @@ export class CartService {
         }));
 
       return cartItems.map((item) => {
-        const book = data.find((res) => res.bookId === item.bookId);
+        const book = response.find((res) => res.bookId === item.bookId?.toString());
         return {
           ...item,
-          availability: book?.avalability || 0,
+          availability: book?.availability || 0,
           price: book?.price || 0,
           name: book?.name || '',
         };
@@ -95,10 +94,10 @@ export class CartService {
     if (!cartItems?.length) throw new BadRequestException('cart is empty');
 
     try {
-      const data = await this._productClientService.GetAvailability({
-        bookIds: cartItems.map((item) => item._id.toString()),
+      const { response } = await this._productClientService.GetAvailability({
+        bookIds: cartItems.map((item) => item.bookId.toString()),
       });
-      if (!data?.length || data?.length !== cartItems?.length) {
+      if (!response?.length || response?.length !== cartItems?.length) {
         throw new BadRequestException('some of the items are not valid');
       }
 
@@ -106,11 +105,11 @@ export class CartService {
 
       if (
         !cartItems.every((item) => {
-          const book = data.find((res) => res.bookId === item.bookId);
+          const book = response.find((res) => res.bookId === item.bookId?.toString());
           if (!book) {
             return false;
           }
-          if (book.avalability - item.quantity < 0) {
+          if (book.availability - item.quantity < 0) {
             return false;
           }
           responses.push({
@@ -134,13 +133,13 @@ export class CartService {
   async addItemToCart(
     userId: objectId,
     { bookId, quantity }: CreateCartItemDto
-  ) {
+  ): Promise<CartItemEntity> {
     let activeCart = await this.getActiveCart(userId);
     if (activeCart) {
       const isDuplicate = await this._cartItemRepository.findOneBy({
-        userId: { $eq: userId },
+        userId: { $eq: new ObjectId(userId) },
         cartId: { $eq: activeCart._id },
-        bookId: { $eq: bookId },
+        bookId: { $eq: new ObjectId(bookId) },
       });
       if (isDuplicate) {
         throw new BadRequestException('the item is already in your cart');
@@ -150,16 +149,21 @@ export class CartService {
     await this._checkAvailability(bookId, quantity);
 
     if (!activeCart) {
-      activeCart = await this._cartRepository.save({ userId, isActive: true });
+      activeCart = await this._cartRepository.save({
+        userId: new ObjectId(userId),
+        isActive: true,
+      });
     }
 
-    return this._cartItemRepository.save({
-      cartId: activeCart._id,
-      userId,
-      bookId,
-      quantity,
-      isActive: true,
-    });
+    return this._cartItemRepository
+      .save({
+        cartId: activeCart._id,
+        userId: new ObjectId(userId),
+        bookId: new ObjectId(bookId),
+        quantity,
+        isActive: true,
+      })
+      .then((res) => responseWrapper(CartItemEntity, res));
   }
 
   async updateCartItem(
@@ -195,20 +199,24 @@ export class CartService {
       { session }
     );
   }
-  
+
   private async _checkAvailability(bookId: objectId, quantity: number) {
+    let res;
     try {
-      const isAvailable = await this._productClientService.GetAvailability({
-        bookIds: [bookId.toString()],
+      const { response } = await this._productClientService.GetAvailability({
+        bookIds: [bookId?.toString()],
       });
-      if (
-        !isAvailable?.length ||
-        (isAvailable?.length && isAvailable[0].avalability - quantity < 1)
-      ) {
+      res = response;
+      if (!res?.length) {
         throw new BadRequestException('item is not available');
       }
     } catch (e) {
-      throw new InternalServerErrorException('Could not Retrive Item Data');
+      console.error('error in retrivien', e);
+      throw new InternalServerErrorException(e);
+    }
+
+    if (res[0].availability - quantity < 0) {
+      throw new BadRequestException('not enough in the store');
     }
   }
 }

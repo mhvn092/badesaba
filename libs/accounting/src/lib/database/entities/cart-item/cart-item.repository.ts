@@ -33,7 +33,7 @@ export class CartItemRepository extends MongoRepository<CartItemEntity> {
 
     if (!cartItem) throw new NotFoundException('آیتم یافت نشد');
 
-    if (cartItem.userId.toString() !== userId) {
+    if (cartItem.userId?.toString() !== userId) {
       throw new ForbiddenException('دسترسی غیرمحاز');
     }
 
@@ -44,10 +44,11 @@ export class CartItemRepository extends MongoRepository<CartItemEntity> {
   }
 
   getByCartId(cartId: objectId, userId: objectId) {
-    return this.findBy({
-      userId: { $eq: userId },
-      cartId: { $eq: cartId },
-    });
+    return this.find({
+      where:{
+      userId: { $eq: new ObjectId(userId) },
+      cartId: { $eq: new ObjectId(cartId) },
+    }});
   }
 
   destroy(id: objectId): Promise<UpdateResultModel> {

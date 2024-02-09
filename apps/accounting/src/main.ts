@@ -15,7 +15,7 @@ async function bootstrap() {
 
   const appConfigInstance: AppConfig = app.get(appConfig.KEY);
 
-  swaggerConfig(app, appConfigInstance, 'Auth', [Paginate]);
+  swaggerConfig(app, appConfigInstance, 'Accounting', [Paginate]);
 
   if (corsConfiguration.enableCors) {
     app.enableCors({

@@ -6,6 +6,7 @@ import {
 } from '@lib/product';
 import { BookEntity } from '@lib/product/entities';
 import {
+  GetAvailabilityResponseItemInterface,
   OrderDto,
   PaginationDto,
   RedisPrefixesEnum,
@@ -21,11 +22,11 @@ import { AuthorService } from '../author/author.service';
 import { CategoryService } from '../category/category.service';
 import {
   GetAvailabilityRequestInterface,
-  GetAvailabilityResponseInterface,
   ReduceAvailibilityRequestInterface,
   ReduceAvailibilityResponseInterface,
 } from '@lib/shared/modules/product-client';
 import { In } from 'typeorm';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class BookService {
@@ -115,15 +116,15 @@ export class BookService {
 
   async getAvailabilities(
     request: GetAvailabilityRequestInterface
-  ): Promise<GetAvailabilityResponseInterface[]> {
+  ): Promise<GetAvailabilityResponseItemInterface[]> {
     const books = await this._bookRepository.find({
       where: {
-        _id: In(request.bookIds),
+        _id: { $in: request.bookIds.map(item => new ObjectId(item)) },
       },
     });
     return books?.map((item) => ({
       bookId: item._id.toString(),
-      avalability: item.availability,
+      availability: item.availability,
       price: item.price,
       name: item.name,
     }));
@@ -144,6 +145,7 @@ export class BookService {
       promises.push(
         this._bookRepository.update(item._id, {
           availability: quantity > 0 ? quantity : 0,
+          salesCount: item.salesCount + quantity,
         })
       );
     });

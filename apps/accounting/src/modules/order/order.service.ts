@@ -131,6 +131,7 @@ export class OrderService {
 
       await session.commitTransaction();
     } catch (e) {
+      console.error('error in transaction happend',e)
       await session.abortTransaction();
 
       throw new InternalServerErrorException('could not create payment');

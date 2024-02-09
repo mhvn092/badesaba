@@ -59,27 +59,4 @@ export class OrderController {
   ): Promise<PaymentGatewayResultDto> {
     return this._orderService.CheckOut(cartId,user._id, data);
   }
-
-  // @PutInfo('/:id', ['id'], UpdateCartItemDto, false, {
-  //   summary: 'update cart item quantity',
-  //   outputType: UpdateResultModel,
-  // })
-  // update(
-  //   @Param('id') id: objectId,
-  //   @User() user: UserAuthModel,
-  //   @Body() data: UpdateCartItemDto
-  // ): Promise<UpdateResultModel> {
-  //   return this._orderService.updateCartItem(id, user._id, data);
-  // }
-
-  // @DeleteInfo(':id', ['id'], {
-  //   summary: 'delete one CartItem',
-  //   description: 'this route deletes one Cart Item',
-  // })
-  // remove(
-  //   @Param('id') id: objectId,
-  //   @User() user: UserAuthModel
-  // ): Promise<UpdateResultModel> {
-  //   return this._orderService.remove(id, user._id);
-  // }
 }

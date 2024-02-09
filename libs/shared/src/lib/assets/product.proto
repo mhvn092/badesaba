@@ -19,9 +19,8 @@ message GetAvailabilityResponse {
 }
 
 message GetAvailabilityResponseArray {
-  repeated GetAvailabilityResponse responses = 1;
+  repeated GetAvailabilityResponse response = 1;
 }
-
 
 message ReduceAvailabilityRequest {
   string bookId = 1;
@@ -29,7 +28,7 @@ message ReduceAvailabilityRequest {
 }
 
 message ReduceAvailabilityRequestArray {
-  repeated ReduceAvailabilityRequest rquest = 1;
+  repeated ReduceAvailabilityRequest requests = 1;
 }
 
 message ReduceAvailabilityResponse {

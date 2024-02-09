@@ -1,8 +1,9 @@
 import { applyDecorators } from '@nestjs/common';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsMongoId } from 'class-validator';
-import { ObjectId, ObjectIdColumn } from 'typeorm';
+import { ObjectIdColumn } from 'typeorm';
 import { getOptionalDecorators } from '../utils';
+import { ObjectId } from 'mongodb';
 
 export function CheckObjectId(
   name: string,
@@ -12,9 +13,15 @@ export function CheckObjectId(
 ) {
   const decorators: Array<PropertyDecorator> = [
     IsMongoId(),
+    // Type(() => ObjectId),
     ...getOptionalDecorators(nullable, 'string'),
     ...(forEntity ? [ObjectIdColumn({ nullable, name, unique })] : []),
-    Transform((value) => (value.value as ObjectId).toString()),
+    Transform((res) => {
+      const key = res?.obj[res?.key]
+      if(res?.obj[res?.key]){
+        return key?.toString()
+      }
+      return (res.value as ObjectId).toString()}),
   ];
 
   return applyDecorators(...decorators);

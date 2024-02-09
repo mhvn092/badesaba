@@ -7,7 +7,7 @@ export interface BodyAuthorizeInterface {
 }
 
 export interface ResponseAuthorizeInterface {
-  id: string,
+  _id: string,
   type: BadgeEnum,
   name: string
 }

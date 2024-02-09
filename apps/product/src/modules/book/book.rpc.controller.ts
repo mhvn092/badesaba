@@ -20,11 +20,13 @@ export class BookRpcController {
   @GrpcMethod(RpcServicesEnum.ProductService, RpcMethodsEnum.GetAvailability)
   async getAvailibilites(
     @GrpcRequest() request: GetAvailabilityRequestInterface
-  ): Promise<GetAvailabilityResponseInterface[]> {
-    return this._bookService.getAvailabilities(request);
+  ): Promise<GetAvailabilityResponseInterface> {
+    const response = await this._bookService.getAvailabilities(request);
+    
+    return { response };
   }
 
-  @GrpcMethod(RpcServicesEnum.ProductService, RpcMethodsEnum.GetAvailability)
+  @GrpcMethod(RpcServicesEnum.ProductService, RpcMethodsEnum.ReduceAvailability)
   async reduceAvailibilites(
     @GrpcRequest() request: ReduceAvailibilityRequestInterface[]
   ): Promise<ReduceAvailibilityResponseInterface> {

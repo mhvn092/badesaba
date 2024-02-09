@@ -2,7 +2,7 @@ import { BadgeEnum } from "../enums/badge.enum";
 
 
 export interface UserAccessInterface {
-  id: string;
+  _id: string;
   type: BadgeEnum;
   name: string;
 }

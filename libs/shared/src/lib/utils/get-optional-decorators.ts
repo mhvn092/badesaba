@@ -3,7 +3,7 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export function getOptionalDecorators(
   optional: boolean,
-  type?: string,
+  type?: any,
   enumType?: Object
 ): Array<PropertyDecorator> {
   return optional

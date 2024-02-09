@@ -13,7 +13,12 @@ export class SharedBaseEntity {
   @ObjectIdColumn({ primary: true, generated: true })
   @ApiProperty({type:'string'})
   @IsMongoId()
-  @Transform((value) => (value.value as ObjectId).toString())
+  @Transform((res) => {
+    const key = res?.obj[res?.key]
+    if(res?.obj[res?.key]){
+      return key?.toString()
+    }
+    return (res.value as ObjectId).toString()})
   _id: ObjectId;
 
   @CreateDateColumn({

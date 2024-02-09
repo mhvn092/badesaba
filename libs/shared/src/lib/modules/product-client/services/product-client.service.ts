@@ -24,7 +24,7 @@ export class ProductClientService {
       );
   }
 
-  GetAvailability(body: GetAvailabilityRequestInterface): Promise<GetAvailabilityResponseInterface[]> {
+  GetAvailability(body: GetAvailabilityRequestInterface): Promise<GetAvailabilityResponseInterface> {
     const observable = this._productService.GetAvailability(body);
     return firstValueFrom(observable);
   }

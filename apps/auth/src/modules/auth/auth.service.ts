@@ -222,7 +222,7 @@ export class AuthService {
     if (!user.isActive) {
       throw new RpcException('User Not Acyive');
     }
-    return { id: user._id.toString(), type: user.badge, name: user.fullName };
+    return { _id: user._id.toString(), type: user.badge, name: user.fullName };
   }
 
   private _generateTokenAndSendEmail(
